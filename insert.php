@@ -22,12 +22,12 @@ $sql = "INSERT INTO produkte (Produktbezeichnung, Produktpreis) VALUES('$Name', 
 if (!mysqli_query($con, $sql)) {
     echo 'Nicht gespeichert!';
 } else {
-    echo 'Gespeichert um ';
+    echo 'Gespeichert am ';
+    echo date("D,d M Y");
+    echo ' um ';
     echo date("H:i:s");
     echo '.';
 }
 
 // Nach drei Sekunden wird die Eingabeseite neu geladen.
 header("refresh:3; url=index.php");
-
-?>
