@@ -38,21 +38,16 @@
         // pre_r($result->fetch_assoc());
         ?>
 
+        <div class="row mt-3">
+            <h2>Daten eingeben</h2>
+        </div>
 
-        <!-- Tabelle zur Dateneingabe -->
+        <!-- Formular in Tabelle zur Dateneingabe -->
         <div class="row">
             <form action="process.php" method="POST">
                 <!-- Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode. -->
                 <input type="hidden" name="id" value="<?php echo $id; ?>">
                 <table class="table">
-                    <thead>
-                        <tr>
-                            <th>Name</th>
-                            <th>Preis</th>
-                            <th colspan="2">Aktion</th>
-                        </tr>
-                    </thead>
-
                     <tr>
                         <td>
                             <div class="form-group">
@@ -67,7 +62,9 @@
                             </div>
                         </td>
                         <td>
-                            <div class="form-group">
+                        </td>
+                        <td>
+                            <div class="form-group mt-4">
                                 <!-- Ändert den Button Status zu update wenn ein Produkt geändert wird. -->
                                 <?php
                                 if ($update == true) :
@@ -77,23 +74,11 @@
                                     <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
                                 <?php endif; ?>
                             </div>
-
                         </td>
                     </tr>
-
                 </table>
             </form>
-
-
-
         </div>
-
-
-
-
-
-
-
 
         <!-- Tabelle zur Darstellung aller Produkte. -->
         <div class="row justify-content-center">
@@ -131,31 +116,6 @@
         }
 
         ?>
-        <!-- Formular zur Dateneingabe in die Datenbank. -->
-        <div class="row justify-content-center">
-            <form action="process.php" method="POST">
-                <!-- Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode. -->
-                <input type="hidden" name="id" value="<?php echo $id; ?>">
-                <div class="form-group">
-                    <label>Name:</label>
-                    <input type="text" name="produktbezeichnung" class="form-control" value="<?php echo $produktname; ?>" placeholder="Produkt eingeben">
-                </div>
-                <div class="form-group">
-                    <label>Preis:</label>
-                    <input type="number" name="produktpreis" class="form-control" value="<?php echo $produktpreis; ?>" placeholder="Preis in €">
-                </div>
-                <div class="form-group">
-                    <!-- Ändert den Button Status zu update wenn ein Produkt geändert wird. -->
-                    <?php
-                    if ($update == true) :
-                        ?>
-                        <button type="submit" class="btn btn-info" name="update" title="Aktualisieren">Aktualisieren</button>
-                    <?php else : ?>
-                        <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
-                    <?php endif; ?>
-                </div>
-            </form>
-        </div>
     </div>
     <!-- Optional JavaScript -->
     <!-- jQuery first, then Popper.js, then Bootstrap JS -->

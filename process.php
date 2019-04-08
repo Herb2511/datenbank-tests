@@ -9,7 +9,7 @@ $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli
 // Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode.
 $id = 0;
 
-// Erst nach Klicken des "Speichern" Buttons wird der Wert der Variable $update auf "true" gesetzt.
+// Erst nach Klicken des "Speichern" Buttons wird der Wert der Variable $update auf "true" gesetzt. Dieser steht anfangs auf "false".
 $update = false;
 
 // Rückgabewert für das Einsetzen eines leeren Strings in den Wert "values" im Formular unter index.php.
