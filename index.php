@@ -37,6 +37,64 @@
         // Methode "fetch_assoc" benutzen um Daten aus der Datenbank abzufragen und anzuzeigen.
         // pre_r($result->fetch_assoc());
         ?>
+
+
+        <!-- Tabelle zur Dateneingabe -->
+        <div class="row">
+            <form action="process.php" method="POST">
+                <!-- Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode. -->
+                <input type="hidden" name="id" value="<?php echo $id; ?>">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Name</th>
+                            <th>Preis</th>
+                            <th colspan="2">Aktion</th>
+                        </tr>
+                    </thead>
+
+                    <tr>
+                        <td>
+                            <div class="form-group">
+                                <label>Name:</label>
+                                <input type="text" name="produktbezeichnung" class="form-control" value="<?php echo $produktname; ?>" placeholder="Produkt eingeben">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label>Preis:</label>
+                                <input type="number" name="produktpreis" class="form-control" value="<?php echo $produktpreis; ?>" placeholder="Preis in €">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <!-- Ändert den Button Status zu update wenn ein Produkt geändert wird. -->
+                                <?php
+                                if ($update == true) :
+                                    ?>
+                                    <button type="submit" class="btn btn-info" name="update" title="Aktualisieren">Aktualisieren</button>
+                                <?php else : ?>
+                                    <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
+                                <?php endif; ?>
+                            </div>
+
+                        </td>
+                    </tr>
+
+                </table>
+            </form>
+
+
+
+        </div>
+
+
+
+
+
+
+
+
         <!-- Tabelle zur Darstellung aller Produkte. -->
         <div class="row justify-content-center">
             <table class="table">

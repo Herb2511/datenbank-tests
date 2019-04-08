@@ -16,6 +16,10 @@ $update = false;
 $produktname = '';
 $produktpreis = '';
 
+// Datumsausgabe in der Meldung definieren.
+$datum = date("d.m.Y - H:i");
+
+// SPEICHERN
 // Überprüfen, ob der Button Name "speichern" mit der Methode "POST" aus dem Formular geklickt wurde und erstellen von Variablen.
 if (isset($_POST['speichern'])) {
     $produktname = $_POST['produktbezeichnung'];
@@ -25,25 +29,27 @@ if (isset($_POST['speichern'])) {
     $mysqli->query("INSERT INTO produkte (Produktbezeichnung, Produktpreis) VALUES('$produktname', '$produktpreis')") or die($mysqli->error);
 
     // Meldungen in einer Session über erfolgreiches Speichern mit definierter Bootstrap Klasse "success".
-    $_SESSION['message'] = "Produkt $produktname wurde gespeichert!";
+    $_SESSION['message'] = "Produkt $produktname wurde gespeichert am $datum!";
     $_SESSION['msg_type'] = "success";
 
     // Redirect nach dem Speichern zur index.php Seite.
     header("location: index.php");
 }
+// LÖSCHEN
 // Überprüfen, ob der Button Name "delete" geklickt wurde und mit der Methode "GET" die Daten löschen.
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $mysqli->query("DELETE FROM produkte WHERE ProduktID=$id") or die($mysqli->error);
 
     // Meldungen in einer Session über erfolgreiches Löschen mit definierter Bootstrap Klasse "danger".
-    $_SESSION['message'] = "Produkt $produktname wurde gelöscht!";
+    $_SESSION['message'] = "Produkt $produktname wurde am $datum gelöscht!";
     $_SESSION['msg_type'] = "danger";
 
     // Redirect nach dem Löschen zur index.php Seite.
     header("location: index.php");
 }
 
+// ÄNDERN
 // Überprüfen, ob der Button Name "edit" geklickt wurde und mit der Methode "GET" die Daten bearbeiten. Danach wird der Button "Update" in der index.php wieder zu "Speichern" gesetzt.
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
@@ -58,15 +64,16 @@ if (isset($_GET['edit'])) {
     }
 }
 
+// AKTUALISIEREN
 // Überprüfen, ob der Button Name "update" geklickt wurde und mit der Methode "POST" die Daten bearbeiten und zurück zur index.php Seite routen.
 if (isset($_POST['update'])) {
     $id = $_POST['id'];
     $produktname = $_POST['produktbezeichnung'];
     $produktpreis = $_POST['produktpreis'];
 
-    $mysqli->query("UPDATE produkte SET Produktbezeichnung='$produktname', Produktpreis='produktpreis' WHERE ProduktID='$id'") or die($mysqli->error);
+    $mysqli->query("UPDATE produkte SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis' WHERE ProduktID='$id'") or die($mysqli->error);
 
-    $_SESSION['message'] = "Produkt $produktname wurde aktualisiert!";
+    $_SESSION['message'] = "Produkt $produktname wurde am $datum aktualisiert!";
     $_SESSION['msg_type'] = "warning";
 
     header('location: index.php');
