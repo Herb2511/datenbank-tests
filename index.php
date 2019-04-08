@@ -17,7 +17,7 @@
     // Ausgabe der Meldungen je nach Aktion von "msg_type" aus "process.php".
     if (isset($_SESSION['message'])) : ?>
 
-        <div class="alert alert-<?=$_SESSION['msg_type']?>">
+        <div class="alert alert-<?= $_SESSION['msg_type'] ?>">
 
             <?php
             echo $_SESSION['message'];
@@ -76,16 +76,25 @@
         <!-- Formular zur Dateneingabe in die Datenbank. -->
         <div class="row justify-content-center">
             <form action="process.php" method="POST">
+                <!-- Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode. -->
+                <input type="hidden" name="id" value="<?php echo $id; ?>">
                 <div class="form-group">
                     <label>Name:</label>
-                    <input type="text" name="produktbezeichnung" class="form-control" value="<?php echo $produktname;?>" placeholder="Produkt eingeben">
+                    <input type="text" name="produktbezeichnung" class="form-control" value="<?php echo $produktname; ?>" placeholder="Produkt eingeben">
                 </div>
                 <div class="form-group">
-                    <label>Preis in €:</label>
-                    <input type="number" name="produktpreis" class="form-control" value="<?php echo $produktpreis;?>" placeholder="€">
+                    <label>Preis:</label>
+                    <input type="number" name="produktpreis" class="form-control" value="<?php echo $produktpreis; ?>" placeholder="Preis in €">
                 </div>
                 <div class="form-group">
-                    <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
+                    <!-- Ändert den Button Status zu update wenn ein Produkt geändert wird. -->
+                    <?php
+                    if ($update == true) :
+                        ?>
+                        <button type="submit" class="btn btn-info" name="update" title="Aktualisieren">Aktualisieren</button>
+                    <?php else : ?>
+                        <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
+                    <?php endif; ?>
                 </div>
             </form>
         </div>
