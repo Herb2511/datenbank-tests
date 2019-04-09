@@ -35,6 +35,7 @@ if (isset($_POST['speichern'])) {
     // Redirect nach dem Speichern zur index.php Seite.
     header("location: index.php");
 }
+
 // LÖSCHEN
 // Überprüfen, ob der Button Name "delete" geklickt wurde und mit der Methode "GET" die Daten löschen.
 if (isset($_GET['delete'])) {
@@ -78,3 +79,4 @@ if (isset($_POST['update'])) {
 
     header('location: index.php');
 }
+

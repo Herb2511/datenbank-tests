@@ -39,7 +39,7 @@
         ?>
 
         <div class="row mt-3">
-            <h2>Daten eingeben</h2>
+            <h2>Produkt anlegen/bearbeiten</h2>
         </div>
 
         <!-- Formular in Tabelle zur Dateneingabe -->
@@ -51,14 +51,14 @@
                     <tr>
                         <td>
                             <div class="form-group">
-                                <label>Name:</label>
+                                <label><b>Name:</b></label>
                                 <input type="text" name="produktbezeichnung" class="form-control" value="<?php echo $produktname; ?>" placeholder="Produkt eingeben">
                             </div>
                         </td>
                         <td>
                             <div class="form-group">
-                                <label>Preis:</label>
-                                <input type="number" name="produktpreis" class="form-control" value="<?php echo $produktpreis; ?>" placeholder="Preis in €">
+                                <label><b>Preis:</b></label>
+                                <input type="text" name="produktpreis" class="form-control" value="<?php echo $produktpreis; ?>" placeholder="Preis in €">
                             </div>
                         </td>
                         <td>
@@ -81,6 +81,9 @@
         </div>
 
         <!-- Tabelle zur Darstellung aller Produkte. -->
+        <div class="row mt-3">
+            <h2>Produktübersicht</h2>
+        </div>
         <div class="row justify-content-center">
             <table class="table">
                 <thead>

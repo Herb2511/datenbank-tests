@@ -22,17 +22,18 @@ CREATE TABLE IF NOT EXISTS `produkte` (
   `Produktbezeichnung` varchar(100) CHARACTER SET utf8 NOT NULL,
   `Produktpreis` decimal(10,2) NOT NULL,
   PRIMARY KEY (`ProduktID`)
-) ENGINE=InnoDB AUTO_INCREMENT=76 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=80 DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle test.produkte: ~6 rows (ungefähr)
+-- Exportiere Daten aus Tabelle test.produkte: ~7 rows (ungefähr)
 /*!40000 ALTER TABLE `produkte` DISABLE KEYS */;
 INSERT INTO `produkte` (`ProduktID`, `Produktbezeichnung`, `Produktpreis`) VALUES
-	(50, 'Lampe', 34.00),
+	(50, 'Lampe', 19.99),
 	(52, 'Stein', 3.00),
-	(70, 'GlÃ¼hbirne', 4.00),
+	(70, 'GlÃ¼hbirne', 3.90),
 	(71, 'Tisch', 199.00),
 	(72, 'Stuhl', 45.00),
-	(74, 'Bilderrahmen', 16.00);
+	(74, 'Bilderrahmen', 16.00),
+	(75, 'Vorhang', 29.90);
 /*!40000 ALTER TABLE `produkte` ENABLE KEYS */;
 
 /*!40101 SET SQL_MODE=IFNULL(@OLD_SQL_MODE, '') */;
