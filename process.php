@@ -79,4 +79,3 @@ if (isset($_POST['update'])) {
 
     header('location: index.php');
 }
-
