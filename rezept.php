@@ -39,62 +39,49 @@
         ?>
 
         <div class="row mt-3">
-            <h2>Neues Rezept hinzufügen</h2>
+            <h2>Rezept bearbeiten</h2>
         </div>
 
         <!-- Formular in Tabelle zur Dateneingabe -->
         <div class="row">
-
-            <table class="table">
-
-                <div class="form-group mt-4">
-                    <!-- Button erstellen -->
-                    <a href="neues-rezept.php" class="btn btn-primary" title="Erstellen">Erstellen</a>
-
-                </div>
-                </td>
-                </tr>
-            </table>
-
-        </div>
-
-        <!-- Tabelle zur Darstellung aller Produkte. -->
-        <div class="row mt-3">
-            <h2>Rezeptübersicht</h2>
-        </div>
-        <div class="row justify-content-center">
-            <table class="table">
-                <thead>
+            <form action="process.php" method="POST">
+                <!-- Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode. -->
+                <input type="hidden" name="id" value="<?php echo $id; ?>">
+                <table class="table">
                     <tr>
-                        <th>Name</th>
-                        <th>Preis</th>
-                        <th colspan="2">Aktion</th>
-                    </tr>
-                </thead>
-                <?php
-                // While Schleife benutzen, um alle Daten aus der Datenbank in die Tabelle zu schreiben.
-                while ($row = $result->fetch_assoc()) :
-                    ?>
-                    <tr>
-                        <td><?php echo $row['Produktbezeichnung'] ?></td>
-                        <td><?php echo $row['Produktpreis'], ' €' ?></td>
                         <td>
-                            <!-- Button Bearbeiten. -->
-                            <a href="rezept.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
-
-                            <!-- Button und Funktion Löschen mit Warnhinweis. -->
-                            <script type="text/javascript">
-                                function ConfirmDelete() {
-                                    if (confirm("Wollen Sie das Rezept wirklich löschen?"))
-                                        location.href = 'process.php?delete=<?php echo $row['ProduktID']; ?>';
-                                }
-                            </script>
-                            <a href="#" class="btn btn-danger" onclick="ConfirmDelete()" title="Löschen">Löschen</a>
+                            <div class="form-group">
+                                <label><b>Name:</b></label>
+                                <input type="text" name="produktbezeichnung" class="form-control" value="<?php echo $produktname; ?>" placeholder="Produkt eingeben">
+                            </div>
+                        </td>
+                        <td>
+                            <div class="form-group">
+                                <label><b>Preis:</b></label>
+                                <input type="text" name="produktpreis" class="form-control" value="<?php echo $produktpreis; ?>" placeholder="Preis in €">
+                            </div>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            <div class="form-group mt-4">
+                                <!-- Button Zurück -->
+                                <a href="index.php" class="btn btn-secondary" title="Zurück">Zurück</a>
+                                <!-- Ändert den Button Status zu update wenn ein Produkt geändert wird. -->
+                                <?php
+                                if ($update == true) :
+                                    ?>
+                                    <button type="submit" class="btn btn-info" name="update" title="Aktualisieren">Aktualisieren</button>
+                                <?php else : ?>
+                                    <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
+                                <?php endif; ?>
+                            </div>
                         </td>
                     </tr>
-                <?php endwhile; ?>
-            </table>
+                </table>
+            </form>
         </div>
+
 
         <?php
 
