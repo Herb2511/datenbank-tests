@@ -73,9 +73,6 @@
                                 <table class="table">
                                     <thead>
                                         <tr>
-                                            <th>Rezeptname:</th>
-                                            <th>Beschreibung:</th>
-                                            <th>Dauer:</th>
                                             <th>Schwierigkeit:
                                                 <select name="difficulty">
                                                     <?php echo $option; ?>
