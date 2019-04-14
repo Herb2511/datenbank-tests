@@ -16,6 +16,24 @@
 CREATE DATABASE IF NOT EXISTS `test` /*!40100 DEFAULT CHARACTER SET latin1 */;
 USE `test`;
 
+-- Exportiere Struktur von Tabelle test.dauer
+CREATE TABLE IF NOT EXISTS `dauer` (
+  `DauerID` smallint(6) NOT NULL AUTO_INCREMENT,
+  `DauerName` varchar(10) CHARACTER SET utf8 NOT NULL DEFAULT '0',
+  PRIMARY KEY (`DauerID`)
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=latin1;
+
+-- Exportiere Daten aus Tabelle test.dauer: ~6 rows (ungefähr)
+/*!40000 ALTER TABLE `dauer` DISABLE KEYS */;
+INSERT INTO `dauer` (`DauerID`, `DauerName`) VALUES
+	(1, '15'),
+	(2, '30'),
+	(3, '45'),
+	(4, '60'),
+	(5, '>60'),
+	(6, '>90');
+/*!40000 ALTER TABLE `dauer` ENABLE KEYS */;
+
 -- Exportiere Struktur von Tabelle test.produkte
 CREATE TABLE IF NOT EXISTS `produkte` (
   `ProduktID` int(10) unsigned NOT NULL AUTO_INCREMENT,
@@ -25,20 +43,23 @@ CREATE TABLE IF NOT EXISTS `produkte` (
   `Aenderungsdatum` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `ProduktSchwierigkeitsgrad` varchar(50) CHARACTER SET utf8 NOT NULL,
   `ProduktKategorie` varchar(50) CHARACTER SET utf8 NOT NULL,
+  `ProduktDauer` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
+  `ProduktURL` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`ProduktID`)
-) ENGINE=InnoDB AUTO_INCREMENT=109 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=114 DEFAULT CHARSET=latin1;
 
 -- Exportiere Daten aus Tabelle test.produkte: ~9 rows (ungefähr)
 /*!40000 ALTER TABLE `produkte` DISABLE KEYS */;
-INSERT INTO `produkte` (`ProduktID`, `Produktbezeichnung`, `Produktpreis`, `Produktbeschreibung`, `Aenderungsdatum`, `ProduktSchwierigkeitsgrad`, `ProduktKategorie`) VALUES
-	(78, 'Lampe', 9.90, '', '0000-00-00 00:00:00', '', ''),
-	(90, 'Tisch', 199.99, '', '2019-04-13 22:02:28', '', ''),
-	(93, 'Stuhl', 29.00, '', '2019-04-13 22:10:24', '', ''),
-	(94, 'Stein', 21.00, '', '2019-04-13 22:12:20', '', ''),
-	(99, 'Telefon', 19.95, '', '2019-04-13 22:51:45', '', ''),
-	(103, 'Hi', 10.00, 'testen', '2019-04-14 00:47:51', '', ''),
-	(104, 'Hihjo', 23.00, 'sdasd', '2019-04-14 00:49:24', 'mittel', ''),
-	(108, 'Kuchen', 2.50, 'Kuchen ist lecker!', '2019-04-14 01:08:23', 'leicht', 'Nachspeisen');
+INSERT INTO `produkte` (`ProduktID`, `Produktbezeichnung`, `Produktpreis`, `Produktbeschreibung`, `Aenderungsdatum`, `ProduktSchwierigkeitsgrad`, `ProduktKategorie`, `ProduktDauer`, `ProduktURL`) VALUES
+	(78, 'Lampe', 10.00, '', '2019-04-14 14:31:23', '', '', '0', 'lampe'),
+	(90, 'Tisch', 199.99, '', '2019-04-13 22:02:28', '', '', '0', ''),
+	(93, 'Stuhl', 29.00, '', '2019-04-13 22:10:24', '', '', '0', ''),
+	(94, 'Stein', 21.00, '', '2019-04-13 22:12:20', '', '', '0', ''),
+	(99, 'Telefon', 19.95, '', '2019-04-13 22:51:45', '', '', '0', ''),
+	(110, 'Pizza', 8.00, 'Pizza ist super!', '2019-04-14 13:58:28', 'leicht', 'Pasta', '0', ''),
+	(111, 'Kuchen', 4.00, 'Kuchen ist lecker!', '2019-04-14 13:58:49', 'mittel', 'Nachspeisen', '0', ''),
+	(112, 'Gurkensalat', 2.00, 'Gurkensalat mit Essig!', '2019-04-14 14:12:03', 'anspruchsvoll', 'Salate', '30', ''),
+	(113, 'GemÃ¼sepfanne', 4.50, 'Lecker GemÃ¼se!', '2019-04-14 14:17:25', 'anspruchsvoll', 'Vegetarisch', '45', '');
 /*!40000 ALTER TABLE `produkte` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle test.rezept_bilder
@@ -79,7 +100,7 @@ CREATE TABLE IF NOT EXISTS `schwierigkeitsgrad` (
   PRIMARY KEY (`SchwierigkeitsgradID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle test.schwierigkeitsgrad: ~3 rows (ungefähr)
+-- Exportiere Daten aus Tabelle test.schwierigkeitsgrad: ~2 rows (ungefähr)
 /*!40000 ALTER TABLE `schwierigkeitsgrad` DISABLE KEYS */;
 INSERT INTO `schwierigkeitsgrad` (`SchwierigkeitsgradID`, `SchwierigkeitsgradName`) VALUES
 	(1, 'leicht'),

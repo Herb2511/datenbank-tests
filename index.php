@@ -60,14 +60,15 @@
 
         <!-- Tabelle zur Darstellung aller Produkte. -->
         <div class="row mt-3">
-            <h2>Rezeptübersicht</h2>
+            <form action="process.php" method="POST">
+                <h2>Rezeptübersicht</h2>
         </div>
         <div class="row justify-content-center">
             <table class="table">
                 <thead>
                     <tr>
                         <th>Name</th>
-                        <th>Preis</th>
+                        <th>Dauer</th>
                         <th colspan="2">Aktion</th>
                     </tr>
                 </thead>
@@ -77,7 +78,7 @@
                     ?>
                     <tr>
                         <td><?php echo $row['Produktbezeichnung'] ?></td>
-                        <td><?php echo $row['Produktpreis'], ' €' ?></td>
+                        <td><?php echo $row['ProduktDauer'], ' Min.' ?></td>
                         <td>
                             <!-- Button Bearbeiten. -->
                             <a href="rezept.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
@@ -95,6 +96,7 @@
                 <?php endwhile; ?>
             </table>
         </div>
+        </form>
 
         <?php
 

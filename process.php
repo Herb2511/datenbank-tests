@@ -18,6 +18,7 @@ $produktpreis = '';
 $produktbeschreibung = '';
 $produktschwierigkeitsgrad = '';
 $produktkategorie = '';
+$produktdauer = '';
 
 // Datumsausgabe in der Meldung definieren.
 $datum = date("d.m.Y - H:i");
@@ -43,6 +44,14 @@ while ($row = mysqli_fetch_assoc($category)) {
     $options .= '<option value = "' . $row['RezeptKategorieName'] . '">' . $row['RezeptKategorieName'] . '</option>';
 }
 
+// Werte aus der Tabelle Dauer holen und in <optionss></optionss> legen.
+$duration = $mysqli->query("SELECT DauerName FROM dauer ORDER BY DauerID ASC") or die($mysqli->error);
+$optionss = '';
+while ($row = mysqli_fetch_assoc($duration)) {
+    $optionss .= '<option value = "' . $row['DauerName'] . '">' . $row['DauerName'] . ' Min.</option>';
+}
+
+
 
 
 
@@ -59,9 +68,10 @@ if (isset($_POST['speichern'])) {
     $produktbeschreibung = $_POST['produktbeschreibung'];
     $produktschwierigkeitsgrad = $_POST['difficulty'];
     $produktkategorie = $_POST['category'];
+    $produktdauer = $_POST['duration'];
 
     // Speichern in die Datenbank.
-    $mysqli->query("INSERT INTO produkte (Produktbezeichnung, Produktpreis, Produktbeschreibung, ProduktSchwierigkeitsgrad, ProduktKategorie) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie')") or die($mysqli->error);
+    $mysqli->query("INSERT INTO produkte (Produktbezeichnung, Produktpreis, Produktbeschreibung, ProduktSchwierigkeitsgrad, ProduktKategorie, ProduktDauer) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer')") or die($mysqli->error);
 
     // Meldungen in einer Session über erfolgreiches Speichern mit definierter Bootstrap Klasse "success".
     $_SESSION['message'] = "Rezept $produktname wurde gespeichert am $datum!";
