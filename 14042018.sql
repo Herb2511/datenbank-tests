@@ -53,13 +53,10 @@ CREATE TABLE IF NOT EXISTS `produkte` (
 INSERT INTO `produkte` (`ProduktID`, `Produktbezeichnung`, `Produktpreis`, `Produktbeschreibung`, `Aenderungsdatum`, `ProduktSchwierigkeitsgrad`, `ProduktKategorie`, `ProduktDauer`, `ProduktURL`) VALUES
 	(78, 'Lampe', 10.00, '', '2019-04-14 14:31:23', '', '', '0', 'lampe'),
 	(90, 'Tisch', 199.99, '', '2019-04-13 22:02:28', '', '', '0', ''),
-	(93, 'Stuhl', 29.00, '', '2019-04-13 22:10:24', '', '', '0', ''),
-	(94, 'Stein', 21.00, '', '2019-04-13 22:12:20', '', '', '0', ''),
-	(99, 'Telefon', 19.95, '', '2019-04-13 22:51:45', '', '', '0', ''),
-	(110, 'Pizza', 8.00, 'Pizza ist super!', '2019-04-14 13:58:28', 'leicht', 'Pasta', '0', ''),
-	(111, 'Kuchen', 4.00, 'Kuchen ist lecker!', '2019-04-14 13:58:49', 'mittel', 'Nachspeisen', '0', ''),
-	(112, 'Gurkensalat', 2.00, 'Gurkensalat mit Essig!', '2019-04-14 14:12:03', 'anspruchsvoll', 'Salate', '30', ''),
-	(113, 'GemÃ¼sepfanne', 4.50, 'Lecker GemÃ¼se!', '2019-04-14 14:17:25', 'anspruchsvoll', 'Vegetarisch', '45', '');
+	(120, 'Stuhl', 23.00, '', '2019-04-14 15:34:10', 'leicht', 'Pasta', '15', ''),
+	(121, 'Gurkensalat', 23.00, 'Gurkensalat mit Essig!', '2019-04-14 15:34:29', 'leicht', 'Nachspeisen', '30', ''),
+	(122, 'Pizza', 2.00, 'Pizza ist super!', '2019-04-14 15:36:30', 'anspruchsvoll', 'Ofengerichte', '60', ''),
+	(123, 'Bolo', 400.00, 'Faulis Bolo Schule', '2019-04-14 15:40:38', 'mittel', 'Pasta', '>60', '');
 /*!40000 ALTER TABLE `produkte` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle test.rezept_bilder
@@ -100,7 +97,7 @@ CREATE TABLE IF NOT EXISTS `schwierigkeitsgrad` (
   PRIMARY KEY (`SchwierigkeitsgradID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle test.schwierigkeitsgrad: ~2 rows (ungefähr)
+-- Exportiere Daten aus Tabelle test.schwierigkeitsgrad: ~3 rows (ungefähr)
 /*!40000 ALTER TABLE `schwierigkeitsgrad` DISABLE KEYS */;
 INSERT INTO `schwierigkeitsgrad` (`SchwierigkeitsgradID`, `SchwierigkeitsgradName`) VALUES
 	(1, 'leicht'),
