@@ -62,6 +62,40 @@
                             </div>
                         </td>
                         <td>
+
+                            <div class="form-group">
+                                <label><b>Rezeptbeschreibung:</b></label>
+                                <input type="text" name="produktbeschreibung" class="form-control" value="<?php echo $produktbeschreibung; ?>" placeholder="Produktbeschreibung">
+                            </div>
+
+                            <!-- Select Optionen. Kommen von der Datenbank in process.php, werden hier über das "name-tag" in process.php übertragen und in die Datenbank Tabelle produkte/jeweilige Spalte gespeichert. -->
+                            <div class="row">
+                                <table class="table">
+                                    <form action="process.php" method="GET">
+                                        <thead>
+                                            <tr>
+                                                <th>Schwierigkeit:
+                                                    <select name="difficulty">
+                                                    <?php echo $option; ?>
+                                                     
+                                                    </select>
+                                                </th>
+                                                <th>Kategorie:
+                                                    <select name="category">
+                                                        <?php echo $options; ?>
+                                                    </select>
+                                                </th>
+
+                                                <th>Dauer:
+                                                    <select name="duration">
+                                                        <?php echo $optionss; ?>
+                                                    </select>
+                                                </th>
+                                            </tr>
+                                        </thead>
+                                    </form>
+                                </table>
+                            </div>
                         </td>
                         <td>
                             <div class="form-group mt-4">
@@ -81,7 +115,6 @@
                 </table>
             </form>
         </div>
-
 
         <?php
 

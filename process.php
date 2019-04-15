@@ -108,6 +108,10 @@ if (isset($_GET['edit'])) {
         $row = $result->fetch_array();
         $produktname = $row['Produktbezeichnung'];
         $produktpreis = $row['Produktpreis'];
+        $produktbeschreibung = $row['Produktbeschreibung'];
+        $produktschwierigkeitsgrad = $row['ProduktSchwierigkeitsgrad'];
+        $produktkategorie = $row['ProduktKategorie'];
+        $produktdauer = $row['ProduktDauer'];
     }
 }
 
@@ -117,8 +121,12 @@ if (isset($_POST['update'])) {
     $id = $_POST['id'];
     $produktname = $_POST['produktbezeichnung'];
     $produktpreis = $_POST['produktpreis'];
+    $produktbeschreibung = $_POST['produktbeschreibung'];
+    $produktschwierigkeitsgrad = $_POST['difficulty'];
+    $produktkategorie = $_POST['category'];
+    $produktdauer = $_POST['duration'];
 
-    $mysqli->query("UPDATE produkte SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis' WHERE ProduktID='$id'") or die($mysqli->error);
+    $mysqli->query("UPDATE produkte SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis', Produktbeschreibung='$produktbeschreibung', ProduktSchwierigkeitsgrad='$produktschwierigkeitsgrad', ProduktKategorie='$produktkategorie', ProduktDauer='$produktdauer'  WHERE ProduktID='$id'") or die($mysqli->error);
 
     $_SESSION['message'] = "Rezept $produktname wurde am $datum aktualisiert!";
     $_SESSION['msg_type'] = "warning";

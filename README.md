@@ -9,3 +9,5 @@ https://stackoverflow.com/questions/5613898/storing-images-in-sql-server
 https://youtu.be/4ZpqQ3j1o2w
 
 https://youtu.be/JaRq73y5MJk
+
+Image Upload https://youtu.be/1NiJcZrPHvA

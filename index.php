@@ -42,20 +42,16 @@
             <h2>Neues Rezept hinzufügen</h2>
         </div>
 
-        <!-- Formular in Tabelle zur Dateneingabe -->
+        <!-- Formular in Tabelle zur Dateneingabe. -->
         <div class="row">
-
             <table class="table">
-
                 <div class="form-group mt-4">
                     <!-- Button erstellen -->
                     <a href="neues-rezept.php" class="btn btn-primary" title="Erstellen">Erstellen</a>
-
                 </div>
                 </td>
                 </tr>
             </table>
-
         </div>
 
         <!-- Tabelle zur Darstellung aller Produkte. -->

@@ -68,7 +68,7 @@
                             </div>
 
 
-                            <!-- Select Optionen. Kommen von der Datenbank in process.php und werden hier über das "name-tag" in process.php übertragen und in die Datenbank Tabelle produkte/jeweilige Spalte gespeichert. -->
+                            <!-- Select Optionen. Kommen von der Datenbank in process.php, werden hier über das "name-tag" in process.php übertragen und in die Datenbank Tabelle produkte/jeweilige Spalte gespeichert. -->
                             <div class="row">
                                 <table class="table">
                                     <thead>
@@ -93,14 +93,6 @@
                                     </thead>
                                 </table>
                             </div>
-
-
-
-
-
-
-
-
                         </td>
                         <td>
                             <div class="form-group mt-4">
@@ -114,15 +106,6 @@
                 </table>
             </form>
         </div>
-
-
-
-
-
-
-
-
-
 
         <?php
 
