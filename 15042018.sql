@@ -67,7 +67,7 @@ CREATE TABLE IF NOT EXISTS `rezept_bilder` (
   PRIMARY KEY (`RezeptBildID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle test.rezept_bilder: ~0 rows (ungefähr)
+-- Exportiere Daten aus Tabelle test.rezept_bilder: ~2 rows (ungefähr)
 /*!40000 ALTER TABLE `rezept_bilder` DISABLE KEYS */;
 INSERT INTO `rezept_bilder` (`RezeptBildID`, `RezeptBildName`, `RezeptBildVerzeichnis`) VALUES
 	(13, '0ca7994e8d880fb2177fe8b844f08a34', 'images/web/0ca7994e8d880fb2177fe8b844f08a34.jpg'),
@@ -101,7 +101,7 @@ CREATE TABLE IF NOT EXISTS `schwierigkeitsgrad` (
   PRIMARY KEY (`SchwierigkeitsgradID`)
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle test.schwierigkeitsgrad: ~2 rows (ungefähr)
+-- Exportiere Daten aus Tabelle test.schwierigkeitsgrad: ~3 rows (ungefähr)
 /*!40000 ALTER TABLE `schwierigkeitsgrad` DISABLE KEYS */;
 INSERT INTO `schwierigkeitsgrad` (`SchwierigkeitsgradID`, `SchwierigkeitsgradName`) VALUES
 	(1, 'leicht'),
