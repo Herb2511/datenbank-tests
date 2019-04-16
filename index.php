@@ -10,11 +10,11 @@
 </head>
 
 <body>
-    <!-- process.php Datei einbinden und einmal ausführen. -->
-    <?php require_once 'process.php'; ?>
+    <!-- aufgaben.php Datei einbinden und einmal ausführen. -->
+    <?php require_once 'aufgaben.php'; ?>
 
     <?php
-    // Ausgabe der Meldungen je nach Aktion von "msg_type" aus "process.php".
+    // Ausgabe der Meldungen je nach Aktion von "msg_type" aus "aufgaben.php".
     if (isset($_SESSION['message'])) : ?>
 
         <div class="alert alert-<?= $_SESSION['msg_type'] ?>">
@@ -31,7 +31,7 @@
         // Datenbankverbindung aufbauen.
         $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
         // Alle Produkte aus der Datenbank in Variable $result schreiben.
-        $result = $mysqli->query("SELECT * FROM produkte") or die($mysqli->error);
+        $result = $mysqli->query("SELECT * FROM produkte INNER JOIN rezept_bilder ON ProduktID = RezeptBildID") or die($mysqli->error);
         // Datenbankabfrage.
         // pre_r($result);
         // Methode "fetch_assoc" benutzen um Daten aus der Datenbank abzufragen und anzuzeigen.
@@ -56,15 +56,18 @@
 
         <!-- Tabelle zur Darstellung aller Produkte. -->
         <div class="row mt-3">
-            <form action="process.php" method="GET">
+            <form action="aufgaben.php" method="GET">
                 <h2>Rezeptübersicht</h2>
         </div>
         <div class="row justify-content-center">
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Bild</th>
                         <th>Name</th>
-                        <th>Preis</th>
+                        <th>Kategorie</th>
+                        <th>Schwierigkeit</th>
+                        <th>Dauer</th>
                         <th colspan="2">Aktion</th>
                     </tr>
                 </thead>
@@ -73,20 +76,17 @@
                 while ($row = $result->fetch_assoc()) :
                     ?>
                     <tr>
+                        <td><img class="img-responsive" src="<?= $row['RezeptBildVerzeichnis'] ?>" width='70px' title="<?= $row['RezeptBildName']; ?>" alt="<?= $row['RezeptBildName']; ?>"></td>
                         <td><?php echo $row['Produktbezeichnung'] ?></td>
-                        <td><?php echo $row['Produktpreis'], ' €' ?></td>
+                        <td><?php echo $row['ProduktKategorie'] ?></td>
+                        <td><?php echo $row['ProduktSchwierigkeitsgrad'] ?></td>
+                        <td><?php echo $row['ProduktDauer'], ' Min.' ?></td>
                         <td>
                             <!-- Button Bearbeiten. -->
-                            <a href="rezept.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
+                            <a href="rezept-bearbeiten.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
 
                             <!-- Button und Funktion Löschen mit Warnhinweis. -->
-                            <script type="text/javascript">
-                                function ConfirmDelete() {
-                                    if (confirm("Wollen Sie das Rezept wirklich löschen?"))
-                                        location.href = 'process.php?delete=<?php echo $row['ProduktID']; ?>';
-                                }
-                            </script>
-                            <a href="#" class="btn btn-danger" onclick="ConfirmDelete()" title="Löschen">Löschen</a>
+                            <a href="index.php?delete=<?php echo $row['ProduktID']; ?>" onclick="return confirm('Rezept <?php echo $row['Produktbezeichnung']; ?> wirklich löschen?'); " class="btn btn-danger" title="Löschen">Löschen</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>

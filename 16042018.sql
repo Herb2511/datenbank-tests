@@ -46,17 +46,16 @@ CREATE TABLE IF NOT EXISTS `produkte` (
   `ProduktDauer` varchar(10) CHARACTER SET utf8 DEFAULT NULL,
   `ProduktURL` varchar(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`ProduktID`)
-) ENGINE=InnoDB AUTO_INCREMENT=125 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=151 DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle test.produkte: ~6 rows (ungefähr)
+-- Exportiere Daten aus Tabelle test.produkte: ~5 rows (ungefähr)
 /*!40000 ALTER TABLE `produkte` DISABLE KEYS */;
 INSERT INTO `produkte` (`ProduktID`, `Produktbezeichnung`, `Produktpreis`, `Produktbeschreibung`, `Aenderungsdatum`, `ProduktSchwierigkeitsgrad`, `ProduktKategorie`, `ProduktDauer`, `ProduktURL`) VALUES
-	(78, 'Lampe', 10.00, 'SchÃ¶ne Lampe.', '2019-04-15 11:37:17', 'leicht', 'Pasta', '15', 'lampe'),
-	(90, 'Tisch', 199.99, 'Holztisch.', '2019-04-15 17:29:55', 'leicht', 'Pasta', '15', ''),
-	(120, 'Stuhl', 23.00, 'Test', '2019-04-15 12:10:34', 'anspruchsvoll', 'Vegetarisch', '>90', ''),
-	(121, 'Gurkensalat', 23.00, 'Gurkensalat mit Essig!', '2019-04-14 15:34:29', 'leicht', 'Nachspeisen', '30', ''),
-	(122, 'Pizza', 2.00, 'Pizza ist super und schnell gemacht!', '2019-04-15 11:36:35', 'leicht', 'Ofengerichte', '>60', ''),
-	(123, 'Bolo', 400.00, 'Faulis Bolo Schule', '2019-04-15 11:59:46', 'mittel', 'Pasta', '15', '');
+	(128, 'Spagetti Bolognese', 12.50, 'Bolo!', '2019-04-16 18:49:03', 'anspruchsvoll', 'Pasta', '60', ''),
+	(130, 'Spagetti Carbonara', 12.50, 'Carbonara!', '2019-04-15 23:23:46', 'leicht', 'Pasta', '15', ''),
+	(131, 'Gurkensalat mit Essig', 2.50, 'Gurkensalat mit Essig!', '2019-04-16 15:56:31', 'leicht', 'Salate', '15', ''),
+	(148, 'Faulis Wundertorte', 2.50, 'Test', '2019-04-16 18:49:38', 'mittel', 'Nachspeisen', '30', ''),
+	(150, 'Lasagne', 4.50, 'Lasagne ist lecker!', '2019-04-16 18:38:02', 'mittel', 'Ofengerichte', '45', '');
 /*!40000 ALTER TABLE `produkte` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle test.rezept_bilder
@@ -65,13 +64,17 @@ CREATE TABLE IF NOT EXISTS `rezept_bilder` (
   `RezeptBildName` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '0',
   `RezeptBildVerzeichnis` varchar(255) CHARACTER SET utf8 NOT NULL DEFAULT '0',
   PRIMARY KEY (`RezeptBildID`)
-) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=latin1;
+) ENGINE=InnoDB AUTO_INCREMENT=83 DEFAULT CHARSET=latin1;
 
--- Exportiere Daten aus Tabelle test.rezept_bilder: ~0 rows (ungefähr)
+-- Exportiere Daten aus Tabelle test.rezept_bilder: ~5 rows (ungefähr)
 /*!40000 ALTER TABLE `rezept_bilder` DISABLE KEYS */;
 INSERT INTO `rezept_bilder` (`RezeptBildID`, `RezeptBildName`, `RezeptBildVerzeichnis`) VALUES
-	(13, '0ca7994e8d880fb2177fe8b844f08a34', 'images/web/0ca7994e8d880fb2177fe8b844f08a34.jpg'),
-	(21, 'Tumblr_mm56u3Br9b1rm8yh2o1_1280', 'images/web/tumblr_mm56u3Br9b1rm8yh2o1_1280.jpg');
+	(128, 'Spagetti Bolognese', 'images/web/spagetti-bolognese.jpg'),
+	(130, 'Spagetti Carbonara', 'images/web/spagetti-carbonara.jpg'),
+	(131, 'Gurkensalat Mit Essig', 'images/web/gurkensalat-mit-essig.jpg'),
+	(147, 'Tumblr_mm56u3Br9b1rm8yh2o1_1280', 'images/web/tumblr_mm56u3Br9b1rm8yh2o1_1280.jpg'),
+	(148, 'Tumblr_mm56u3Br9b1rm8yh2o1_1280', 'images/web/tumblr_mm56u3Br9b1rm8yh2o1_1280.jpg'),
+	(150, 'Lasagne', 'images/web/lasagne.jpg');
 /*!40000 ALTER TABLE `rezept_bilder` ENABLE KEYS */;
 
 -- Exportiere Struktur von Tabelle test.rezept_kategorie

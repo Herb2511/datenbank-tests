@@ -9,6 +9,9 @@ $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli
 // Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode.
 $id = 0;
 
+// Datumsausgabe in der Meldung/message definieren.
+$datum = date("d.m.Y - H:i");
+
 // Erst nach Klicken des "Speichern" Buttons wird der Wert der Variable $update auf "true" gesetzt. Dieser steht anfangs auf "false".
 $update = false;
 
@@ -19,46 +22,6 @@ $produktbeschreibung = '';
 $produktschwierigkeitsgrad = '';
 $produktkategorie = '';
 $produktdauer = '';
-
-// Datumsausgabe in der Meldung definieren.
-$datum = date("d.m.Y - H:i");
-
-
-
-
-
-
-
-
-// Werte aus der Tabelle Schwierigkeitsgrad holen und in <option></option> legen.
-$difficulty = $mysqli->query("SELECT SchwierigkeitsgradName FROM schwierigkeitsgrad ORDER BY SchwierigkeitsgradID ASC") or die($mysqli->error);
-$option = '';
-while ($row = mysqli_fetch_assoc($difficulty)) {
-    $option .= '<option value = "' . $row['SchwierigkeitsgradName'] . '">' . $row['SchwierigkeitsgradName'] . '</option>';
-}
-
-// Werte aus der Tabelle Rezeptkategorie holen und in <options></options> legen.
-$category = $mysqli->query("SELECT RezeptKategorieName FROM rezept_kategorie ORDER BY RezeptKategorieID ASC") or die($mysqli->error);
-$options = '';
-while ($row = mysqli_fetch_assoc($category)) {
-    $options .= '<option value = "' . $row['RezeptKategorieName'] . '">' . $row['RezeptKategorieName'] . '</option>';
-}
-
-// Werte aus der Tabelle Dauer holen und in <optionss></optionss> legen.
-$duration = $mysqli->query("SELECT DauerName FROM dauer ORDER BY DauerID ASC") or die($mysqli->error);
-$optionss = '';
-while ($row = mysqli_fetch_assoc($duration)) {
-    $optionss .= '<option value = "' . $row['DauerName'] . '">' . $row['DauerName'] . ' Min.</option>';
-}
-
-
-
-
-
-
-
-
-
 
 // SPEICHERN
 // Überprüfen, ob der Button Name "speichern" mit der Methode "POST" aus dem Formular geklickt wurde und erstellen von Variablen.
@@ -132,4 +95,26 @@ if (isset($_POST['update'])) {
     $_SESSION['msg_type'] = "warning";
 
     header('location: index.php');
+}
+
+// Select Elemente ANZEIGEN
+// Werte aus der Tabelle Schwierigkeitsgrad holen und in Variable legen.
+$difficulty = $mysqli->query("SELECT SchwierigkeitsgradName FROM schwierigkeitsgrad ORDER BY SchwierigkeitsgradID ASC") or die($mysqli->error);
+$option = '';
+while ($row = mysqli_fetch_assoc($difficulty)) {
+    $option .= '<option value = "' . $row['SchwierigkeitsgradName'] . '">' . $row['SchwierigkeitsgradName'] . '</option>';
+}
+
+// Werte aus der Tabelle Rezeptkategorie holen und in <options></options> legen.
+$category = $mysqli->query("SELECT RezeptKategorieName FROM rezept_kategorie ORDER BY RezeptKategorieID ASC") or die($mysqli->error);
+$options = '';
+while ($row = mysqli_fetch_assoc($category)) {
+    $options .= '<option value = "' . $row['RezeptKategorieName'] . '">' . $row['RezeptKategorieName'] . '</option>';
+}
+
+// Werte aus der Tabelle Dauer holen und in <optionss></optionss> legen.
+$duration = $mysqli->query("SELECT DauerName FROM dauer ORDER BY DauerID ASC") or die($mysqli->error);
+$optionss = '';
+while ($row = mysqli_fetch_assoc($duration)) {
+    $optionss .= '<option value = "' . $row['DauerName'] . '">' . $row['DauerName'] . ' Min.</option>';
 }

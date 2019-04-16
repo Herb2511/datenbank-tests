@@ -10,11 +10,20 @@
 </head>
 
 <body>
-    <form action="" method="POST" enctype="multipart/form-data">
-        <!-- <input type="file" name="userfile[]" value=""> -->
-        <input type="file" name="userfile[]" value="" multiple=""> 
-        <input type="submit" name="submit" value="Upload">
-    </form>
+    <div class="form-group">
+        <form action="" method="POST" enctype="multipart/form-data">
+            <!-- <input type="file" name="userfile[]" value=""> -->
+            <input type="file" name="userfile[]" value="" multiple="">
+            <input type="submit" name="submit" value="Upload">
+        </form>
+    </div>
+
+    <div class="form-group mt-4">
+        <!-- Button Zurück -->
+        <a href="neues-rezept.php" class="btn btn-secondary" title="Zurück">Zurück</a>
+        <!-- Button Speichern -->
+        <button type="submit" class="btn btn-primary" name="speichern" title="Speichern und weiter">Speichern und weiter</button>
+    </div>
 </body>
 
 </html>
@@ -46,24 +55,25 @@ if (isset($_FILES['userfile'])) {
         if ($file_array[$i]['error']) {
             ?> <div class="alert alert danger">
                 <?php echo $file_array[$i]['name'] . ' - ' . $phpFileUploadErrors[$file_array[$i]['error']];
-                ?> </div> <?php
+                ?> </div>
+        <?php
 
-                                } else {
+    } else {
 
-                                    $extensions = array('jpg', 'png', 'gif', 'jpeg');
+        $extensions = array('jpg', 'png', 'gif', 'jpeg');
 
-                                    $file_ext = explode('.', $file_array[$i]['name']);
+        $file_ext = explode('.', $file_array[$i]['name']);
 
-                                    // pre_r($file_ext);die;
-                                    // Bildformatierung des Namens in der Datenbank.
-                                    $name = $file_ext[0];
-                                    $name = preg_replace("!-!", " ", $name);
-                                    $name = ucwords($name);
+        // pre_r($file_ext);die;
+        // Bildformatierung des Namens in der Datenbank.
+        $name = $file_ext[0];
+        $name = preg_replace("!-!", " ", $name);
+        $name = ucwords($name);
 
-                                    $file_ext = end($file_ext);
+        $file_ext = end($file_ext);
 
-                                    if (!in_array($file_ext, $extensions)) {
-                                        ?> <div class="alert alert-danger">
+        if (!in_array($file_ext, $extensions)) {
+            ?> <div class="alert alert-danger">
                     <?php echo "{$file_array[$i]['name']}";
                     ?> </div> <?php
                                         } else {
@@ -109,4 +119,15 @@ if (isset($_FILES['userfile'])) {
                                 echo '<pre>';
                                 print_r($array);
                                 echo '</pre>';
+                            }
+
+
+                            // Bilder aus der Datenbank abfragen.
+                            $result = $mysqli->query("SELECT * FROM $table") or die($mysqli->error);
+
+                            // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
+                            while ($data = $result->fetch_assoc()) {
+                                // print_r($data);
+                                // echo "<h2>{$data['RezeptBildName']}</h2>";
+                                echo "<img src='{$data['RezeptBildVerzeichnis']}' width='20%' height='20%' title='{$data['RezeptBildName']}' alt='{$data['RezeptBildName']}'>";
                             }

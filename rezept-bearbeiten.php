@@ -10,11 +10,11 @@
 </head>
 
 <body>
-    <!-- process.php Datei einbinden und einmal ausführen. -->
-    <?php require_once 'process.php'; ?>
+    <!-- aufgaben.php Datei einbinden und einmal ausführen. -->
+    <?php require_once 'aufgaben.php'; ?>
 
     <?php
-    // Ausgabe der Meldungen je nach Aktion von "msg_type" aus "process.php".
+    // Ausgabe der Meldungen je nach Aktion von "msg_type" aus "aufgaben.php".
     if (isset($_SESSION['message'])) : ?>
 
         <div class="alert alert-<?= $_SESSION['msg_type'] ?>">
@@ -44,7 +44,7 @@
 
         <!-- Formular in Tabelle zur Dateneingabe -->
         <div class="row">
-            <form action="process.php" method="POST">
+            <form action="aufgaben.php" method="POST">
                 <!-- Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode. -->
                 <input type="hidden" name="id" value="<?php echo $id; ?>">
                 <table class="table">
@@ -68,16 +68,15 @@
                                 <input type="text" name="produktbeschreibung" class="form-control" value="<?php echo $produktbeschreibung; ?>" placeholder="Produktbeschreibung">
                             </div>
 
-                            <!-- Select Optionen. Kommen von der Datenbank in process.php, werden hier über das "name-tag" in process.php übertragen und in die Datenbank Tabelle produkte/jeweilige Spalte gespeichert. -->
+                            <!-- Select Optionen. Kommen von der Datenbank in aufgaben.php, werden hier über das "name-tag" in aufgaben.php übertragen und in die Datenbank Tabelle produkte/jeweilige Spalte gespeichert. -->
                             <div class="row">
                                 <table class="table">
-                                    <form action="process.php" method="GET">
+                                    <form action="aufgaben.php" method="GET">
                                         <thead>
                                             <tr>
                                                 <th>Schwierigkeit:
                                                     <select name="difficulty">
-                                                    <?php echo $option; ?>
-                                                     
+                                                        <?php echo $option; ?>
                                                     </select>
                                                 </th>
                                                 <th>Kategorie:
