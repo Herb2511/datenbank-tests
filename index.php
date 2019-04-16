@@ -10,11 +10,11 @@
 </head>
 
 <body>
-    <!-- process.php Datei einbinden und einmal ausführen. -->
-    <?php require_once 'process.php'; ?>
+    <!-- aufgaben.php Datei einbinden und einmal ausführen. -->
+    <?php require_once 'aufgaben.php'; ?>
 
     <?php
-    // Ausgabe der Meldungen je nach Aktion von "msg_type" aus "process.php".
+    // Ausgabe der Meldungen je nach Aktion von "msg_type" aus "aufgaben.php".
     if (isset($_SESSION['message'])) : ?>
 
         <div class="alert alert-<?= $_SESSION['msg_type'] ?>">
@@ -31,7 +31,7 @@
         // Datenbankverbindung aufbauen.
         $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
         // Alle Produkte aus der Datenbank in Variable $result schreiben.
-        $result = $mysqli->query("SELECT * FROM produkte") or die($mysqli->error);
+        $result = $mysqli->query("SELECT * FROM produkte INNER JOIN rezept_bilder ON ProduktID = RezeptBildID") or die($mysqli->error);
         // Datenbankabfrage.
         // pre_r($result);
         // Methode "fetch_assoc" benutzen um Daten aus der Datenbank abzufragen und anzuzeigen.
@@ -39,57 +39,35 @@
         ?>
 
         <div class="row mt-3">
-            <h2>Produkt anlegen/bearbeiten</h2>
+            <h2>Neues Rezept hinzufügen</h2>
         </div>
 
-        <!-- Formular in Tabelle zur Dateneingabe -->
+        <!-- Formular in Tabelle zur Dateneingabe. -->
         <div class="row">
-            <form action="process.php" method="POST">
-                <!-- Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode. -->
-                <input type="hidden" name="id" value="<?php echo $id; ?>">
-                <table class="table">
-                    <tr>
-                        <td>
-                            <div class="form-group">
-                                <label><b>Name:</b></label>
-                                <input type="text" name="produktbezeichnung" class="form-control" value="<?php echo $produktname; ?>" placeholder="Produkt eingeben">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                <label><b>Preis:</b></label>
-                                <input type="text" name="produktpreis" class="form-control" value="<?php echo $produktpreis; ?>" placeholder="Preis in €">
-                            </div>
-                        </td>
-                        <td>
-                        </td>
-                        <td>
-                            <div class="form-group mt-4">
-                                <!-- Ändert den Button Status zu update wenn ein Produkt geändert wird. -->
-                                <?php
-                                if ($update == true) :
-                                    ?>
-                                    <button type="submit" class="btn btn-info" name="update" title="Aktualisieren">Aktualisieren</button>
-                                <?php else : ?>
-                                    <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
-                                <?php endif; ?>
-                            </div>
-                        </td>
-                    </tr>
-                </table>
-            </form>
+            <table class="table">
+                <div class="form-group mt-4">
+                    <!-- Button erstellen -->
+                    <a href="neues-rezept.php" class="btn btn-primary" title="Erstellen">Erstellen</a>
+                </div>
+                </td>
+                </tr>
+            </table>
         </div>
 
         <!-- Tabelle zur Darstellung aller Produkte. -->
         <div class="row mt-3">
-            <h2>Produktübersicht</h2>
+            <form action="aufgaben.php" method="GET">
+                <h2>Rezeptübersicht</h2>
         </div>
         <div class="row justify-content-center">
             <table class="table">
                 <thead>
                     <tr>
+                        <th>Bild</th>
                         <th>Name</th>
-                        <th>Preis</th>
+                        <th>Kategorie</th>
+                        <th>Schwierigkeit</th>
+                        <th>Dauer</th>
                         <th colspan="2">Aktion</th>
                     </tr>
                 </thead>
@@ -98,16 +76,24 @@
                 while ($row = $result->fetch_assoc()) :
                     ?>
                     <tr>
+                        <td><img class="img-responsive" src="<?= $row['RezeptBildVerzeichnis'] ?>" width='70px' title="<?= $row['RezeptBildName']; ?>" alt="<?= $row['RezeptBildName']; ?>"></td>
                         <td><?php echo $row['Produktbezeichnung'] ?></td>
-                        <td><?php echo $row['Produktpreis'] ?></td>
+                        <td><?php echo $row['ProduktKategorie'] ?></td>
+                        <td><?php echo $row['ProduktSchwierigkeitsgrad'] ?></td>
+                        <td><?php echo $row['ProduktDauer'], ' Min.' ?></td>
                         <td>
-                            <a href="index.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
-                            <a href="process.php?delete=<?php echo $row['ProduktID']; ?>" class="btn btn-danger" title="Löschen">Löschen</a>
+                            <!-- Button Bearbeiten. -->
+                            <a href="rezept-bearbeiten.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
+
+                            <!-- Button und Funktion Löschen mit Warnhinweis. -->
+                            <a href="index.php?delete=<?php echo $row['ProduktID']; ?>" onclick="return confirm('Rezept <?php echo $row['Produktbezeichnung']; ?> wirklich löschen?'); " class="btn btn-danger" title="Löschen">Löschen</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
             </table>
         </div>
+        </form>
+
         <?php
 
         function pre_r($array)
