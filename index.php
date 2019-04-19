@@ -28,10 +28,7 @@
 
     <div class="container">
         <?php
-        // Datenbankverbindung aufbauen.
-        $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
-        // Alle Produkte aus der Datenbank in Variable $result schreiben.
-        $result = $mysqli->query("SELECT * FROM produkte INNER JOIN rezept_bilder ON ProduktID = RezeptBildID") or die($mysqli->error);
+        
         // Datenbankabfrage.
         // pre_r($result);
         // Methode "fetch_assoc" benutzen um Daten aus der Datenbank abzufragen und anzuzeigen.
@@ -76,7 +73,7 @@
                 while ($row = $result->fetch_assoc()) :
                     ?>
                     <tr>
-                        <td><img class="img-responsive" src="<?= $row['RezeptBildVerzeichnis'] ?>" width='70px' title="<?= $row['RezeptBildName']; ?>" alt="<?= $row['RezeptBildName']; ?>"></td>
+                        <td><img class="img-responsive" src="<?= $row['BildVerzeichnis'] ?>" width='70px' title="<?= $row['BildName']; ?>" alt="<?= $row['BildName']; ?>"></td>
                         <td><?php echo $row['Produktbezeichnung'] ?></td>
                         <td><?php echo $row['ProduktKategorie'] ?></td>
                         <td><?php echo $row['ProduktSchwierigkeitsgrad'] ?></td>

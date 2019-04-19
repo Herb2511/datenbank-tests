@@ -6,6 +6,9 @@ session_start();
 // Datenbankverbindung aufbauen.
 $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
 
+// Alle Produkte aus der Datenbank in Variable $result schreiben.
+$result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktBildID = BildID") or die($mysqli->error);
+
 // Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode.
 $id = 0;
 
@@ -22,6 +25,7 @@ $produktbeschreibung = '';
 $produktschwierigkeitsgrad = '';
 $produktkategorie = '';
 $produktdauer = '';
+$produktbild = '';
 
 // SPEICHERN
 // Überprüfen, ob der Button Name "speichern" mit der Methode "POST" aus dem Formular geklickt wurde und erstellen von Variablen.
@@ -32,9 +36,17 @@ if (isset($_POST['speichern'])) {
     $produktschwierigkeitsgrad = $_POST['difficulty'];
     $produktkategorie = $_POST['category'];
     $produktdauer = $_POST['duration'];
+    $produktbild  = $_POST['userfile[]'];
+
 
     // Speichern in die Datenbank.
-    $mysqli->query("INSERT INTO produkte (Produktbezeichnung, Produktpreis, Produktbeschreibung, ProduktSchwierigkeitsgrad, ProduktKategorie, ProduktDauer) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer')") or die($mysqli->error);
+    $mysqli->query("INSERT INTO produkte (Produktbezeichnung, Produktpreis, Produktbeschreibung, ProduktSchwierigkeitsgrad, ProduktKategorie, ProduktDauer, ProduktBildID) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer', '$produktbild')") or die($mysqli->error);
+
+
+
+
+
+
 
     // Meldungen in einer Session über erfolgreiches Speichern mit definierter Bootstrap Klasse "success".
     $_SESSION['message'] = "Rezept $produktname wurde gespeichert am $datum!";
@@ -133,3 +145,102 @@ while ($row = mysqli_fetch_assoc($duration)) {
         $option3 .= '<option value = "' . $row['DauerName'] . '">' . $row['DauerName'] . '</option>';
     }
 }
+
+
+// --------------------------------------------------------------------------------------------------------------------------
+// Bilderupload und Speichern in der Datenbank.
+
+// Fehlermeldungsausgabe.
+$phpFileUploadErrors = array(
+    0 => 'Der Bildupload war erfolgreich!',
+    1 => 'Der Bildupload übersteigt die maximale Dateispeichergröße. Diese ist in der php.ini einzustellen.',
+    2 => 'Der Bildupload übersteigt die MAX_FILE_SIZE . Diese ist in der HTML form vorgeschrieben.',
+    3 => 'Die Bilddatei wurde nur zum Teil hochgeladen.',
+    4 => 'Keine Bilddatei wurde hochgeladen.',
+    6 => 'Es fehlt der temporäre Ordner.',
+    7 => 'Fehler beim Schreiben der Datei auf den Server.',
+    8 => 'Eine PHP Erweiterung stoppte den Bilderupload.',
+);
+
+// $_$FILES global variable
+if (isset($_FILES['userfile'])) {
+    $file_array = reArrayFiles($_FILES['userfile']);
+    // pre_r($file_array);
+    for ($i = 0; $i < count($file_array); $i++) {
+        if ($file_array[$i]['error']) {
+            ?> <div class="alert alert danger">
+                <?php echo $file_array[$i]['name'] . ' - ' . $phpFileUploadErrors[$file_array[$i]['error']];
+                ?> </div>
+        <?php
+
+    } else {
+
+        $extensions = array('jpg', 'png', 'gif', 'jpeg');
+
+        $file_ext = explode('.', $file_array[$i]['name']);
+
+        // pre_r($file_ext);die;
+        // Bildformatierung des Namens in der Datenbank.
+        $name = $file_ext[0];
+        $name = preg_replace("!-!", " ", $name);
+        $name = ucwords($name);
+
+        $file_ext = end($file_ext);
+
+        if (!in_array($file_ext, $extensions)) {
+            ?> <div class="alert alert-danger">
+                    <?php echo "{$file_array[$i]['name']}";
+                    ?> </div> <?php                                  
+        } 
+        else
+        {
+
+                // Daten Upload mit Name und Speicherort.
+                $img_dir = 'images/web/' . $file_array[$i]['name'];
+
+                move_uploaded_file($file_array[$i]['tmp_name'],$img_dir);
+
+                // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
+                $sql = "INSERT IGNORE INTO bilder (BildName,BildVerzeichnis) VALUES('$name','$img_dir')";
+                $mysqli->query($sql) or die($mysqli->error);
+
+                    ?> <div class="alert alert-success">
+                    <?php echo $file_array[$i]['name'] . ' - ' . $phpFileUploadErrors[$file_array[$i]['error']];
+                    ?> </div> <?php
+        }
+                                    }
+                                }
+                            }
+
+                            function reArrayFiles(&$file_post)
+                            {
+
+                                $file_ary = array();
+                                $file_count = count($file_post['name']);
+                                $file_keys = array_keys($file_post);
+
+                                for ($i = 0; $i < $file_count; $i++) {
+                                    foreach ($file_keys as $key) {
+                                        $file_ary[$i][$key] = $file_post[$key][$i];
+                                    }
+                                }
+
+                                return $file_ary;
+                            }
+
+                            // function pre_r($array)
+                            // {
+                            //     echo '<pre>';
+                            //     print_r($array);
+                            //     echo '</pre>';
+                            // }
+
+// Bilder aus der Datenbank abfragen.
+$bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '1'") or die($mysqli->error);
+
+// Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
+$data = $bilder->fetch_assoc();
+    // print_r($data);
+    // echo "<h2>{$data['BildName']}</h2>";
+    // echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";
+                            

@@ -33,7 +33,7 @@
 // Datenbankverbindung aufbauen.
 $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
 // Variable erstellen, die die Tabelle der Bilder in der Datenbank beinhaltet.
-$table = 'rezept_bilder';
+// $table = 'bilder';
 
 // Fehlermeldungsausgabe.
 $phpFileUploadErrors = array(
@@ -87,7 +87,7 @@ if (isset($_FILES['userfile'])) {
                                             );
 
                                             // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
-                                            $sql = "INSERT IGNORE INTO $table (RezeptBildName,RezeptBildVerzeichnis) VALUES('$name','$img_dir')";
+                                            $sql = "INSERT IGNORE INTO bilder (BildName,BildVerzeichnis) VALUES('$name','$img_dir')";
                                             $mysqli->query($sql) or die($mysqli->error);
 
                                             ?> <div class="alert alert-success">
@@ -123,11 +123,11 @@ if (isset($_FILES['userfile'])) {
 
 
                             // Bilder aus der Datenbank abfragen.
-                            $result = $mysqli->query("SELECT * FROM $table") or die($mysqli->error);
+                            $result = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '1'") or die($mysqli->error);
 
                             // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
-                            while ($data = $result->fetch_assoc()) {
+                            $data = $result->fetch_assoc();
                                 // print_r($data);
-                                // echo "<h2>{$data['RezeptBildName']}</h2>";
-                                echo "<img src='{$data['RezeptBildVerzeichnis']}' width='20%' height='20%' title='{$data['RezeptBildName']}' alt='{$data['RezeptBildName']}'>";
-                            }
+                                // echo "<h2>{$data['BildName']}</h2>";
+                                echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";
+                            

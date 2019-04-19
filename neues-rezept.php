@@ -42,7 +42,7 @@
 
         <!-- Formular in Tabelle zur Dateneingabe -->
         <div class="row">
-            <form action="aufgaben.php" method="POST">
+            <form action="aufgaben.php" method="POST" enctype="multipart/form-data">
                 <!-- Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode. -->
                 <input type="hidden" name="id" value="<?php echo $id; ?>">
                 <table class="table">
@@ -91,18 +91,43 @@
                                 </table>
                             </div>
                         </td>
-                        <td>
-                            <div class="form-group mt-4">
-                                <!-- Button Zurück -->
-                                <a href="index.php" class="btn btn-secondary" title="Zurück">Zurück</a>
-                                <!-- Button Speichern.-->
-                                <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
-                            </div>
-                        </td>
                     </tr>
                 </table>
+
+                <div class="row">
+                    <?php
+
+                    // Bilder aus der Datenbank abfragen.
+                    $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '1'") or die($mysqli->error);
+
+                    // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
+                    $data = $bilder->fetch_assoc();
+
+                    echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";
+                    ?>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <input type="file" name="userfile[]" value="" multiple="">
+                        <input type="submit" name="submit" value="Upload">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="form-group mt-4">
+                        <!-- Button Zurück -->
+                        <a href="index.php" class="btn btn-secondary" title="Zurück">Zurück</a>
+                        <!-- Button Speichern.-->
+                        <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
+                    </div>
+                </div>
+
+
             </form>
         </div>
+
+
+
 
         <?php
 
