@@ -28,8 +28,6 @@
 
     <div class="container">
         <?php
-        // Datenbankverbindung aufbauen.
-        $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
         // Alle Produkte aus der Datenbank in Variable $result schreiben.
         $result = $mysqli->query("SELECT * FROM produkte") or die($mysqli->error);
         // Datenbankabfrage.
@@ -74,18 +72,18 @@
                                         <tr>
                                             <th>Schwierigkeit:
                                                 <select name="difficulty">
-                                                    <?php echo $option; ?>
+                                                    <?php echo $option1; ?>
                                                 </select>
                                             </th>
                                             <th>Kategorie:
                                                 <select name="category">
-                                                    <?php echo $options; ?>
+                                                    <?php echo $option2; ?>
                                                 </select>
                                             </th>
 
                                             <th>Dauer:
                                                 <select name="duration">
-                                                    <?php echo $optionss; ?>
+                                                    <?php echo $option3; ?>
                                                 </select>
                                             </th>
                                         </tr>

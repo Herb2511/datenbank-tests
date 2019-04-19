@@ -97,24 +97,39 @@ if (isset($_POST['update'])) {
     header('location: index.php');
 }
 
-// Select Elemente ANZEIGEN
-// Werte aus der Tabelle Schwierigkeitsgrad holen und in Variable legen.
+// Select Elemente ANZEIGEN und den Fokus setzen.
+// Werte aus der Tabelle Schwierigkeitsgrad holen und in Variable $option1 legen.
 $difficulty = $mysqli->query("SELECT SchwierigkeitsgradName FROM schwierigkeitsgrad ORDER BY SchwierigkeitsgradID ASC") or die($mysqli->error);
-$option = '';
+$option1 = '';
 while ($row = mysqli_fetch_assoc($difficulty)) {
-    $option .= '<option value = "' . $row['SchwierigkeitsgradName'] . '">' . $row['SchwierigkeitsgradName'] . '</option>';
+
+    if ($row['SchwierigkeitsgradName'] == $produktschwierigkeitsgrad) {
+        $option1 .= '<option selected value = "' . $row['SchwierigkeitsgradName'] . '">' . $row['SchwierigkeitsgradName'] . '</option>';
+    } else {
+        $option1 .= '<option value = "' . $row['SchwierigkeitsgradName'] . '">' . $row['SchwierigkeitsgradName'] . '</option>';
+    }
 }
 
-// Werte aus der Tabelle Rezeptkategorie holen und in <options></options> legen.
+// Werte aus der Tabelle Schwierigkeitsgrad holen und in Variable $option2 legen.
 $category = $mysqli->query("SELECT RezeptKategorieName FROM rezept_kategorie ORDER BY RezeptKategorieID ASC") or die($mysqli->error);
-$options = '';
+$option2 = '';
 while ($row = mysqli_fetch_assoc($category)) {
-    $options .= '<option value = "' . $row['RezeptKategorieName'] . '">' . $row['RezeptKategorieName'] . '</option>';
+
+    if ($row['RezeptKategorieName'] == $produktkategorie) {
+        $option2 .= '<option selected value = "' . $row['RezeptKategorieName'] . '">' . $row['RezeptKategorieName'] . '</option>';
+    } else {
+        $option2 .= '<option value = "' . $row['RezeptKategorieName'] . '">' . $row['RezeptKategorieName'] . '</option>';
+    }
 }
 
-// Werte aus der Tabelle Dauer holen und in <optionss></optionss> legen.
+// Werte aus der Tabelle Schwierigkeitsgrad holen und in Variable $option3 legen.
 $duration = $mysqli->query("SELECT DauerName FROM dauer ORDER BY DauerID ASC") or die($mysqli->error);
-$optionss = '';
+$option3 = '';
 while ($row = mysqli_fetch_assoc($duration)) {
-    $optionss .= '<option value = "' . $row['DauerName'] . '">' . $row['DauerName'] . ' Min.</option>';
+
+    if ($row['DauerName'] == $produktdauer) {
+        $option3 .= '<option selected value = "' . $row['DauerName'] . '">' . $row['DauerName'] . '</option>';
+    } else {
+        $option3 .= '<option value = "' . $row['DauerName'] . '">' . $row['DauerName'] . '</option>';
+    }
 }

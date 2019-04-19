@@ -76,18 +76,18 @@
                                             <tr>
                                                 <th>Schwierigkeit:
                                                     <select name="difficulty">
-                                                        <?php echo $option; ?>
+                                                        <?php echo $option1; ?>
                                                     </select>
                                                 </th>
                                                 <th>Kategorie:
                                                     <select name="category">
-                                                        <?php echo $options; ?>
+                                                        <?php echo $option2; ?>
                                                     </select>
                                                 </th>
 
                                                 <th>Dauer:
                                                     <select name="duration">
-                                                        <?php echo $optionss; ?>
+                                                        <?php echo $option3; ?>
                                                     </select>
                                                 </th>
                                             </tr>

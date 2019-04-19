@@ -86,7 +86,7 @@ if (isset($_FILES['userfile'])) {
                                                 $img_dir
                                             );
 
-                                            // SQL Statemen: Speichern des Namens und des Speicherorts in die Datenbank.
+                                            // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
                                             $sql = "INSERT IGNORE INTO $table (RezeptBildName,RezeptBildVerzeichnis) VALUES('$name','$img_dir')";
                                             $mysqli->query($sql) or die($mysqli->error);
 
