@@ -26,6 +26,7 @@ $produktschwierigkeitsgrad = '';
 $produktkategorie = '';
 $produktdauer = '';
 $produktbild = '';
+$produktkueche = '';
 
 // SPEICHERN
 // Überprüfen, ob der Button Name "speichern" mit der Methode "POST" aus dem Formular geklickt wurde und erstellen von Variablen.
@@ -37,10 +38,11 @@ if (isset($_POST['speichern'])) {
     $produktkategorie = $_POST['category'];
     $produktdauer = $_POST['duration'];
     $produktbild  = $_POST['userfile[]'];
+    $produktkueche = $_POST['kueche'];
 
 
     // Speichern in die Datenbank.
-    $mysqli->query("INSERT INTO produkte (Produktbezeichnung, Produktpreis, Produktbeschreibung, ProduktSchwierigkeitsgrad, ProduktKategorie, ProduktDauer, ProduktBildID) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer', '$produktbild')") or die($mysqli->error);
+    $mysqli->query("INSERT INTO produkte (Produktbezeichnung, Produktpreis, Produktbeschreibung, ProduktSchwierigkeitsgrad, ProduktKategorie, ProduktDauer, ProduktBildID, ProduktKueche) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer', '$produktbild', '$produktkueche')") or die($mysqli->error);
 
 
 
@@ -87,6 +89,7 @@ if (isset($_GET['edit'])) {
         $produktschwierigkeitsgrad = $row['ProduktSchwierigkeitsgrad'];
         $produktkategorie = $row['ProduktKategorie'];
         $produktdauer = $row['ProduktDauer'];
+        $produktkueche = $row['ProduktKueche'];
     }
 }
 
@@ -100,8 +103,9 @@ if (isset($_POST['update'])) {
     $produktschwierigkeitsgrad = $_POST['difficulty'];
     $produktkategorie = $_POST['category'];
     $produktdauer = $_POST['duration'];
+    $produktkueche = $_POST['kueche'];
 
-    $mysqli->query("UPDATE produkte SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis', Produktbeschreibung='$produktbeschreibung', ProduktSchwierigkeitsgrad='$produktschwierigkeitsgrad', ProduktKategorie='$produktkategorie', ProduktDauer='$produktdauer'  WHERE ProduktID='$id'") or die($mysqli->error);
+    $mysqli->query("UPDATE produkte SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis', Produktbeschreibung='$produktbeschreibung', ProduktSchwierigkeitsgrad='$produktschwierigkeitsgrad', ProduktKategorie='$produktkategorie', ProduktDauer='$produktdauer', ProduktKueche='$produktkueche'  WHERE ProduktID='$id'") or die($mysqli->error);
 
     $_SESSION['message'] = "Rezept $produktname wurde am $datum aktualisiert!";
     $_SESSION['msg_type'] = "warning";
@@ -143,6 +147,18 @@ while ($row = mysqli_fetch_assoc($duration)) {
         $option3 .= '<option selected value = "' . $row['DauerName'] . '">' . $row['DauerName'] . '</option>';
     } else {
         $option3 .= '<option value = "' . $row['DauerName'] . '">' . $row['DauerName'] . '</option>';
+    }
+}
+
+// Werte aus der Tabelle Kueche holen und in Variable $option4 legen.
+$kueche = $mysqli->query("SELECT KuecheName FROM kueche ORDER BY KuecheID ASC") or die($mysqli->error);
+$option4 = '';
+while ($row = mysqli_fetch_assoc($kueche)) {
+
+    if ($row['KuecheName'] == $produktkueche) {
+        $option4 .= '<option selected value = "' . $row['KuecheName'] . '">' . $row['KuecheName'] . '</option>';
+    } else {
+        $option4 .= '<option value = "' . $row['KuecheName'] . '">' . $row['KuecheName'] . '</option>';
     }
 }
 

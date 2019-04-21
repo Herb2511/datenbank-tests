@@ -65,6 +65,7 @@
                         <th>Kategorie</th>
                         <th>Schwierigkeit</th>
                         <th>Dauer</th>
+                        <th>Küche</th>
                         <th colspan="2">Aktion</th>
                     </tr>
                 </thead>
@@ -78,6 +79,7 @@
                         <td><?php echo $row['ProduktKategorie'] ?></td>
                         <td><?php echo $row['ProduktSchwierigkeitsgrad'] ?></td>
                         <td><?php echo $row['ProduktDauer'], ' Min.' ?></td>
+                        <td><?php echo $row['ProduktKueche'] ?></td>
                         <td>
                             <!-- Button Bearbeiten. -->
                             <a href="rezept-bearbeiten.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>

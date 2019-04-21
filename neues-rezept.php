@@ -86,6 +86,12 @@
                                                     <?php echo $option3; ?>
                                                 </select>
                                             </th>
+
+                                            <th>Küche:
+                                                <select name="kueche">
+                                                    <?php echo $option4; ?>
+                                                </select>
+                                            </th>
                                         </tr>
                                     </thead>
                                 </table>

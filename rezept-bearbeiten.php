@@ -90,6 +90,12 @@
                                                         <?php echo $option3; ?>
                                                     </select>
                                                 </th>
+
+                                                <th>Küche:
+                                                    <select name="kueche">
+                                                        <?php echo $option4; ?>
+                                                    </select>
+                                                </th>
                                             </tr>
                                         </thead>
                                     </form>
@@ -112,6 +118,27 @@
                         </td>
                     </tr>
                 </table>
+
+                <div class="row">
+                    <?php
+
+                    // Bilder aus der Datenbank abfragen.
+                    $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '1'") or die($mysqli->error);
+
+                    // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
+                    $data = $bilder->fetch_assoc();
+
+                    echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";
+                    ?>
+                </div>
+
+                <div class="row">
+                    <div class="form-group">
+                        <input type="file" name="userfile[]" value="" multiple="">
+                        <input type="submit" name="submit" value="Upload">
+                    </div>
+                </div>
+
             </form>
         </div>
 
