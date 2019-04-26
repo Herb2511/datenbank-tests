@@ -120,16 +120,16 @@
                 </table>
 
                 <!-- Bildrückgabe aus aufgaben.php $produktbild = BildVerzeichnis über den LEFT JOIN aus dem query-->
-                <img class="img-responsive" src="<?php echo $produktbild ?>">
+                <img class="img-responsive" src="<?php echo $produktbild ?>" title="<?php echo $produktbildname ?>" alt="<?php echo $produktbildname?>">
 
      
                 <!-- Bilder Upload Funktion -->
-                <div class="row">
+                <!-- <div class="row">
                     <div class="form-group">
                         <input type="file" name="userfile[]" value="" multiple="">
                         <input type="submit" name="submit" value="Upload">
                     </div>
-                </div>
+                </div> -->
             </form>
         </div>
 

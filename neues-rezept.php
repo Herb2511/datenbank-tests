@@ -109,7 +109,7 @@
                 <div class="row">
                     <div class="form-group">
                         <input type="file" name="userfile[]" value="" multiple="">
-                        <input type="submit" name="submit" value="Upload">
+                        <!-- <input type="submit" name="submit" value="Upload"> -->
                     </div>
                 </div>
                 <!-- Buttons -->

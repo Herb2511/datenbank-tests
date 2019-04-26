@@ -28,7 +28,7 @@
 
     <div class="container">
         <?php
-        
+
         // Datenbankabfrage.
         // pre_r($result);
         // Methode "fetch_assoc" benutzen um Daten aus der Datenbank abzufragen und anzuzeigen.
@@ -85,7 +85,7 @@
                             <a href="rezept-bearbeiten.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
 
                             <!-- Button und Funktion Löschen mit Warnhinweis. -->
-                            <a href="index.php?delete=<?php echo $row['ProduktID']; ?>" onclick="return confirm('Rezept <?php echo $row['Produktbezeichnung']; ?> wirklich löschen?'); " class="btn btn-danger" title="Löschen">Löschen</a>
+                            <a href="index.php?delete=<?php echo $row['ProduktID'] ?>" onclick="return confirm('Rezept <?php echo $row['Produktbezeichnung']; ?> wirklich löschen?'); " class="btn btn-danger" title="Löschen">Löschen</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>

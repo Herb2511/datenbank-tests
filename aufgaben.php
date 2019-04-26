@@ -96,6 +96,7 @@ if (isset($_GET['edit'])) {
         $produktkategorie = $row['ProduktKategorie'];
         $produktdauer = $row['ProduktDauer'];
         $produktbild  = $row['BildVerzeichnis'];
+        $produktbildname = $row['BildName'];
         $produktkueche = $row['ProduktKueche'];
     }
 }
@@ -110,7 +111,7 @@ if (isset($_POST['update'])) {
     $produktschwierigkeitsgrad = $_POST['difficulty'];
     $produktkategorie = $_POST['category'];
     $produktdauer = $_POST['duration'];
-    $produktbild  = $_POST['BildVerzeichnis'];
+    $produktbild  = $_POST['userfile[]'];
     $produktkueche = $_POST['kueche'];
 
     $mysqli->query("UPDATE produkte LEFT JOIN bilder ON Produktbezeichnung = BildName SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis', Produktbeschreibung='$produktbeschreibung', ProduktSchwierigkeitsgrad='$produktschwierigkeitsgrad', ProduktKategorie='$produktkategorie', ProduktDauer='$produktdauer', ProduktKueche='$produktkueche'  WHERE ProduktID='$id'") or die($mysqli->error);
@@ -217,51 +218,61 @@ if (isset($_FILES['userfile'])) {
                     ?> </div> <?php
                                         } else {
 
-                                                // Daten Upload mit Name und Speicherort.
-                                                $img_dir = 'images/web/' . $file_array[$i]['name'];
+                                            // Daten Upload mit Name und Speicherort.
+                                            $img_dir = 'images/web/' . $file_array[$i]['name'];
 
-                                                move_uploaded_file($file_array[$i]['tmp_name'], $img_dir);
+                                            move_uploaded_file($file_array[$i]['tmp_name'], $img_dir);
 
-                                                // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
-                                                $sql = "INSERT IGNORE INTO bilder (BildName,BildVerzeichnis) VALUES('$name','$img_dir')";
-                                                $mysqli->query($sql) or die($mysqli->error);
+                                            // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
+                                            $sql = "INSERT IGNORE INTO bilder (BildName,BildVerzeichnis) VALUES('$name','$img_dir')";
+                                            $mysqli->query($sql) or die($mysqli->error);
 
-                                                ?> <div class="alert alert-success">
+                                            ?> <div class="alert alert-success">
                     <?php echo $file_array[$i]['name'] . ' - ' . $phpFileUploadErrors[$file_array[$i]['error']];
                     ?> </div> <?php
                                         }
-                                }
-                            }
-                        }
-
-                        function reArrayFiles(&$file_post)
-                        {
-
-                            $file_ary = array();
-                            $file_count = count($file_post['name']);
-                            $file_keys = array_keys($file_post);
-
-                            for ($i = 0; $i < $file_count; $i++) {
-                                foreach ($file_keys as $key) {
-                                    $file_ary[$i][$key] = $file_post[$key][$i];
+                                    }
                                 }
                             }
 
-                            return $file_ary;
-                        }
+                            function reArrayFiles(&$file_post)
+                            {
 
-                        // function pre_r($array)
-                        // {
-                        //     echo '<pre>';
-                        //     print_r($array);
-                        //     echo '</pre>';
-                        // }
+                                $file_ary = array();
+                                $file_count = count($file_post['name']);
+                                $file_keys = array_keys($file_post);
 
-                        // Bilder aus der Datenbank abfragen.
-                        $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '0'") or die($mysqli->error);
+                                for ($i = 0; $i < $file_count; $i++) {
+                                    foreach ($file_keys as $key) {
+                                        $file_ary[$i][$key] = $file_post[$key][$i];
+                                    }
+                                }
 
-                        // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
-                        $data = $bilder->fetch_assoc();
+                                return $file_ary;
+                            }
+
+                            // function pre_r($array)
+                            // {
+                            //     echo '<pre>';
+                            //     print_r($array);
+                            //     echo '</pre>';
+                            // }
+
+                            // Versuch die Datei aus dem Verzeichnis web zu löschen
+
+                            $img_dir = 'images/web/' . 'name';
+
+                            if (isset($_GET['delete'])) {
+                                delete_uploaded_file('name', $img_dir);
+                            }
+
+
+
+                            // Bilder aus der Datenbank abfragen.
+                            $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '0'") or die($mysqli->error);
+
+                            // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
+                            $data = $bilder->fetch_assoc();
     // print_r($data);
     // echo "<h2>{$data['BildName']}</h2>";
     // echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";
