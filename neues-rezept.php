@@ -99,26 +99,20 @@
                         </td>
                     </tr>
                 </table>
-
+                <!-- Standard Bild anzeigen -->
                 <div class="row">
                     <?php
-
-                    // Bilder aus der Datenbank abfragen.
-                    $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '1'") or die($mysqli->error);
-
-                    // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
-                    $data = $bilder->fetch_assoc();
-
                     echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";
                     ?>
                 </div>
-
+                <!-- Bilder Upload Funktion -->
                 <div class="row">
                     <div class="form-group">
                         <input type="file" name="userfile[]" value="" multiple="">
                         <input type="submit" name="submit" value="Upload">
                     </div>
                 </div>
+                <!-- Buttons -->
                 <div class="row">
                     <div class="form-group mt-4">
                         <!-- Button Zurück -->
@@ -127,13 +121,8 @@
                         <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
                     </div>
                 </div>
-
-
             </form>
         </div>
-
-
-
 
         <?php
 

@@ -6,8 +6,13 @@ session_start();
 // Datenbankverbindung aufbauen.
 $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
 
-// Alle Produkte aus der Datenbank in Variable $result schreiben.
-$result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktBildID = BildID") or die($mysqli->error);
+// Alle Produkte aus der Datenbank in Variable $result schreiben und die Tabellen produkte und bilder mit der ProduktBildID verknüpfen.
+// $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktBildID = BildID") or die($mysqli->error);
+// TEST: anhand der beiden Änderungsdaten kann man ein Rezept mit einem Bild verknüpfen.
+// $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON Aenderungsdatum = BildAenderungsdatum") or die($mysqli->error);
+// TEST: anhand der beiden Spalten Produktbezeichnung und Bildname kann man ein Rezept mit einem Bild verknüpfen. Das heißt: alle Bilder sollten so benannt werden, wie auch das Rezept heißt.
+$result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON Produktbezeichnung = BildName") or die($mysqli->error);
+
 
 // Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode.
 $id = 0;
@@ -63,11 +68,12 @@ if (isset($_POST['speichern'])) {
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $mysqli->query("DELETE FROM produkte WHERE ProduktID=$id") or die($mysqli->error);
+    // Das vorletzte hochgeladene Bild wird gelöscht. Keine Ahnung warum und wie er es bekommt?!
+    $mysqli->query("DELETE FROM bilder WHERE BildID=$id") or die($mysqli->error);
 
     // Meldungen in einer Session über erfolgreiches Löschen mit definierter Bootstrap Klasse "danger".
     $_SESSION['message'] = "Rezept $produktname wurde am $datum gelöscht!";
     $_SESSION['msg_type'] = "danger";
-
 
     // Redirect nach dem Löschen zur index.php Seite.
     header("location: index.php");
@@ -78,7 +84,7 @@ if (isset($_GET['delete'])) {
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $update = true;
-    $result = $mysqli->query("SELECT * FROM produkte WHERE ProduktID=$id") or die($mysqli->error());
+    $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON Produktbezeichnung = BildName WHERE ProduktID=$id") or die($mysqli->error());
 
     // Überprüfen, ob die Datei überhaupts existiert.
     if (@count($result) == 1) {
@@ -89,6 +95,7 @@ if (isset($_GET['edit'])) {
         $produktschwierigkeitsgrad = $row['ProduktSchwierigkeitsgrad'];
         $produktkategorie = $row['ProduktKategorie'];
         $produktdauer = $row['ProduktDauer'];
+        $produktbild  = $row['BildVerzeichnis'];
         $produktkueche = $row['ProduktKueche'];
     }
 }
@@ -103,9 +110,10 @@ if (isset($_POST['update'])) {
     $produktschwierigkeitsgrad = $_POST['difficulty'];
     $produktkategorie = $_POST['category'];
     $produktdauer = $_POST['duration'];
+    $produktbild  = $_POST['BildVerzeichnis'];
     $produktkueche = $_POST['kueche'];
 
-    $mysqli->query("UPDATE produkte SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis', Produktbeschreibung='$produktbeschreibung', ProduktSchwierigkeitsgrad='$produktschwierigkeitsgrad', ProduktKategorie='$produktkategorie', ProduktDauer='$produktdauer', ProduktKueche='$produktkueche'  WHERE ProduktID='$id'") or die($mysqli->error);
+    $mysqli->query("UPDATE produkte LEFT JOIN bilder ON Produktbezeichnung = BildName SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis', Produktbeschreibung='$produktbeschreibung', ProduktSchwierigkeitsgrad='$produktschwierigkeitsgrad', ProduktKategorie='$produktkategorie', ProduktDauer='$produktdauer', ProduktKueche='$produktkueche'  WHERE ProduktID='$id'") or die($mysqli->error);
 
     $_SESSION['message'] = "Rezept $produktname wurde am $datum aktualisiert!";
     $_SESSION['msg_type'] = "warning";
@@ -206,57 +214,54 @@ if (isset($_FILES['userfile'])) {
         if (!in_array($file_ext, $extensions)) {
             ?> <div class="alert alert-danger">
                     <?php echo "{$file_array[$i]['name']}";
-                    ?> </div> <?php                                  
-        } 
-        else
-        {
+                    ?> </div> <?php
+                                        } else {
 
-                // Daten Upload mit Name und Speicherort.
-                $img_dir = 'images/web/' . $file_array[$i]['name'];
+                                                // Daten Upload mit Name und Speicherort.
+                                                $img_dir = 'images/web/' . $file_array[$i]['name'];
 
-                move_uploaded_file($file_array[$i]['tmp_name'],$img_dir);
+                                                move_uploaded_file($file_array[$i]['tmp_name'], $img_dir);
 
-                // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
-                $sql = "INSERT IGNORE INTO bilder (BildName,BildVerzeichnis) VALUES('$name','$img_dir')";
-                $mysqli->query($sql) or die($mysqli->error);
+                                                // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
+                                                $sql = "INSERT IGNORE INTO bilder (BildName,BildVerzeichnis) VALUES('$name','$img_dir')";
+                                                $mysqli->query($sql) or die($mysqli->error);
 
-                    ?> <div class="alert alert-success">
+                                                ?> <div class="alert alert-success">
                     <?php echo $file_array[$i]['name'] . ' - ' . $phpFileUploadErrors[$file_array[$i]['error']];
                     ?> </div> <?php
-        }
-                                    }
+                                        }
+                                }
+                            }
+                        }
+
+                        function reArrayFiles(&$file_post)
+                        {
+
+                            $file_ary = array();
+                            $file_count = count($file_post['name']);
+                            $file_keys = array_keys($file_post);
+
+                            for ($i = 0; $i < $file_count; $i++) {
+                                foreach ($file_keys as $key) {
+                                    $file_ary[$i][$key] = $file_post[$key][$i];
                                 }
                             }
 
-                            function reArrayFiles(&$file_post)
-                            {
+                            return $file_ary;
+                        }
 
-                                $file_ary = array();
-                                $file_count = count($file_post['name']);
-                                $file_keys = array_keys($file_post);
+                        // function pre_r($array)
+                        // {
+                        //     echo '<pre>';
+                        //     print_r($array);
+                        //     echo '</pre>';
+                        // }
 
-                                for ($i = 0; $i < $file_count; $i++) {
-                                    foreach ($file_keys as $key) {
-                                        $file_ary[$i][$key] = $file_post[$key][$i];
-                                    }
-                                }
+                        // Bilder aus der Datenbank abfragen.
+                        $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '0'") or die($mysqli->error);
 
-                                return $file_ary;
-                            }
-
-                            // function pre_r($array)
-                            // {
-                            //     echo '<pre>';
-                            //     print_r($array);
-                            //     echo '</pre>';
-                            // }
-
-// Bilder aus der Datenbank abfragen.
-$bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '1'") or die($mysqli->error);
-
-// Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
-$data = $bilder->fetch_assoc();
+                        // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
+                        $data = $bilder->fetch_assoc();
     // print_r($data);
     // echo "<h2>{$data['BildName']}</h2>";
     // echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";
-                            

@@ -31,7 +31,7 @@
         // Datenbankverbindung aufbauen.
         $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
         // Alle Produkte aus der Datenbank in Variable $result schreiben.
-        $result = $mysqli->query("SELECT * FROM produkte") or die($mysqli->error);
+        $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktBildID = BildID") or die($mysqli->error);
         // Datenbankabfrage.
         // pre_r($result);
         // Methode "fetch_assoc" benutzen um Daten aus der Datenbank abzufragen und anzuzeigen.
@@ -119,26 +119,17 @@
                     </tr>
                 </table>
 
-                <div class="row">
-                    <?php
+                <!-- Bildrückgabe aus aufgaben.php $produktbild = BildVerzeichnis über den LEFT JOIN aus dem query-->
+                <img class="img-responsive" src="<?php echo $produktbild ?>">
 
-                    // Bilder aus der Datenbank abfragen.
-                    $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '1'") or die($mysqli->error);
-
-                    // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
-                    $data = $bilder->fetch_assoc();
-
-                    echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";
-                    ?>
-                </div>
-
+     
+                <!-- Bilder Upload Funktion -->
                 <div class="row">
                     <div class="form-group">
                         <input type="file" name="userfile[]" value="" multiple="">
                         <input type="submit" name="submit" value="Upload">
                     </div>
                 </div>
-
             </form>
         </div>
 
