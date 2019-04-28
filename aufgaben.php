@@ -71,6 +71,12 @@ if (isset($_GET['delete'])) {
     // Das vorletzte hochgeladene Bild wird gelöscht. Keine Ahnung warum und wie er es bekommt?!
     $mysqli->query("DELETE FROM bilder WHERE BildID=$id") or die($mysqli->error);
 
+    // Versuch die Datei vom Server zu löschen. -> Geht nur, wenn man den Namen im Pfad direkt auswählt.
+    // $path = $row['BildVerzeichnis'];
+    $path = "images/web/limetten-curry.jpg";
+    // $path = "images/web/".$bilddatei;
+    unlink($path);
+
     // Meldungen in einer Session über erfolgreiches Löschen mit definierter Bootstrap Klasse "danger".
     $_SESSION['message'] = "Rezept $produktname wurde am $datum gelöscht!";
     $_SESSION['msg_type'] = "danger";
