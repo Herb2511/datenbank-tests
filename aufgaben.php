@@ -68,13 +68,25 @@ if (isset($_POST['speichern'])) {
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
     $mysqli->query("DELETE FROM produkte WHERE ProduktID=$id") or die($mysqli->error);
-    // Das vorletzte hochgeladene Bild wird gelöscht. Keine Ahnung warum und wie er es bekommt?!
+    // Das Bild wird aus der Datenbank gelöscht aber nicht aus dem Ordner "web".
     $mysqli->query("DELETE FROM bilder WHERE BildID=$id") or die($mysqli->error);
+    $mysqli->query("DELETE FROM bilder WHERE BildVerzeichnis=$id") or die($mysqli->error);
 
     // Versuch die Datei vom Server zu löschen. -> Geht nur, wenn man den Namen im Pfad direkt auswählt.
-    // $path = $row['BildVerzeichnis'];
-    $path = "images/web/limetten-curry.jpg";
-    // $path = "images/web/".$bilddatei;
+    // $row = $result->fetch_assoc();
+    $path = $row["BildVerzeichnis"];
+    // $path = basename($row["BildVerzeichnis"]);
+    // $path = "images/web/".$row["BildName"];
+    // $path = basename("images/web/");
+    // $path = basename("images/web");
+    // $path = $path ."/".$row['BildName'];
+
+    // $path = dirname($row["BildVerzeichnis"]);
+    // $path = $path . "/" . $row["BildName"];
+    // $path = $path.$row["BildName"];
+
+    // Hiermit funktioniert das Löschen des Bildes:
+    // $path = "images/web/limetten-curry.jpg";
     unlink($path);
 
     // Meldungen in einer Session über erfolgreiches Löschen mit definierter Bootstrap Klasse "danger".

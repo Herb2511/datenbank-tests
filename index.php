@@ -70,6 +70,16 @@
                     </tr>
                 </thead>
                 <?php
+
+                // Den Verzeichnispfad und Namen des Bildes zum Löschen raus finden.
+                $row = $result->fetch_assoc();
+                // $path = dirname($row["BildVerzeichnis"]);
+                // $path = $path . "/" . $row["BildName"];
+                $path = $row["BildVerzeichnis"];
+
+                print "Die Bilddatei heißt: " . $path;
+
+
                 // While Schleife benutzen, um alle Daten aus der Datenbank in die Tabelle zu schreiben.
                 while ($row = $result->fetch_assoc()) :
                     ?>
