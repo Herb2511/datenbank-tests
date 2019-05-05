@@ -70,11 +70,39 @@ if (isset($_GET['delete'])) {
     $mysqli->query("DELETE FROM produkte WHERE ProduktID=$id") or die($mysqli->error);
     // Das Bild wird aus der Datenbank gelöscht aber nicht aus dem Ordner "web".
     $mysqli->query("DELETE FROM bilder WHERE BildID=$id") or die($mysqli->error);
-    $mysqli->query("DELETE FROM bilder WHERE BildVerzeichnis=$id") or die($mysqli->error);
+    // $mysqli->query("DELETE FROM bilder WHERE BildVerzeichnis=$id") or die($mysqli->error);
+
+    // $datas = mysqli_fetch_array($id);
+    // $path = 'images/web/'.$datas['BildVerzeichnis'];
+    // @unlink($path);
+
+    // unlink('images/web/' . $row["BildVerzeichnis"]);
+
+    // $filename = $row["BildVerzeichnis"];
+    // $path = $row['BildVerzeichnis'];
+
+    // Alle Bilddaten löschen
+    // get all file names
+    $files = glob('images/web/*');
+    // loop through files
+    foreach ($files as $file) {
+        if (is_file($file)) {
+            // delete file
+            unlink($file);
+            echo "Erfolgreich gelöscht!";
+        }
+        else {
+            echo "Fehler!";
+        }
+    }
+
+
+    // $path = $row["BildVerzeichnis"];
+    // unlink($path);
 
     // Versuch die Datei vom Server zu löschen. -> Geht nur, wenn man den Namen im Pfad direkt auswählt.
     // $row = $result->fetch_assoc();
-    $path = $row["BildVerzeichnis"];
+
     // $path = basename($row["BildVerzeichnis"]);
     // $path = "images/web/".$row["BildName"];
     // $path = basename("images/web/");
@@ -87,7 +115,8 @@ if (isset($_GET['delete'])) {
 
     // Hiermit funktioniert das Löschen des Bildes:
     // $path = "images/web/limetten-curry.jpg";
-    unlink($path);
+    // unlink($path);
+
 
     // Meldungen in einer Session über erfolgreiches Löschen mit definierter Bootstrap Klasse "danger".
     $_SESSION['message'] = "Rezept $produktname wurde am $datum gelöscht!";

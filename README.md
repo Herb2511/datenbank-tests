@@ -11,3 +11,5 @@ https://youtu.be/4ZpqQ3j1o2w
 https://youtu.be/JaRq73y5MJk
 
 Image Upload https://youtu.be/1NiJcZrPHvA
+
+JQuery Input Felder https://www.webslesson.info/2016/02/dynamically-add-remove-input-fields-in-php-with-jquery-ajax.html

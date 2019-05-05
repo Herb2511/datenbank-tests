@@ -72,10 +72,10 @@
                 <?php
 
                 // Den Verzeichnispfad und Namen des Bildes zum Löschen raus finden.
-                $row = $result->fetch_assoc();
+                $row = $result->fetch_array();
                 // $path = dirname($row["BildVerzeichnis"]);
                 // $path = $path . "/" . $row["BildName"];
-                $path = $row["BildVerzeichnis"];
+                $path = $row['BildVerzeichnis'];
 
                 print "Die Bilddatei heißt: " . $path;
 
@@ -95,7 +95,7 @@
                             <a href="rezept-bearbeiten.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
 
                             <!-- Button und Funktion Löschen mit Warnhinweis. -->
-                            <a href="index.php?delete=<?php echo $row['ProduktID'] ?>" onclick="return confirm('Rezept <?php echo $row['Produktbezeichnung']; ?> wirklich löschen?'); " class="btn btn-danger" title="Löschen">Löschen</a>
+                            <a href="index.php?delete=<?php echo $row['ProduktID']; ?>" onclick="return confirm('Rezept <?php echo $row['Produktbezeichnung']; ?> wirklich löschen?'); " class="btn btn-danger" title="Löschen">Löschen</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>
