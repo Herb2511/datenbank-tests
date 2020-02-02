@@ -72,17 +72,19 @@
                 <?php
 
                 // Den Verzeichnispfad und Namen des Bildes zum Löschen raus finden.
-                $row = $result->fetch_array();
+
                 // $path = dirname($row["BildVerzeichnis"]);
                 // $path = $path . "/" . $row["BildName"];
-                $path = $row['BildVerzeichnis'];
 
-                print "Die Bilddatei heißt: " . $path;
+                // Den Realname eines Bildes anzeigen
+                // $row = $result->fetch_array();
+                // $path = $row['RealerBildname'];
+                // print "Die Bilddatei heißt: " . $path;
 
 
                 // While Schleife benutzen, um alle Daten aus der Datenbank in die Tabelle zu schreiben.
                 while ($row = $result->fetch_assoc()) :
-                    ?>
+                ?>
                     <tr>
                         <td><img class="img-responsive" src="<?= $row['BildVerzeichnis'] ?>" width='70px' title="<?= $row['BildName']; ?>" alt="<?= $row['BildName']; ?>"></td>
                         <td><?php echo $row['Produktbezeichnung'] ?></td>

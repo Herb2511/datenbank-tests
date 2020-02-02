@@ -4,15 +4,10 @@
 session_start();
 
 // Datenbankverbindung aufbauen.
-$mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
+$mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysqli_error($mysqli));
 
-// Alle Produkte aus der Datenbank in Variable $result schreiben und die Tabellen produkte und bilder mit der ProduktBildID verknüpfen.
-// $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktBildID = BildID") or die($mysqli->error);
-// TEST: anhand der beiden Änderungsdaten kann man ein Rezept mit einem Bild verknüpfen.
-// $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON Aenderungsdatum = BildAenderungsdatum") or die($mysqli->error);
-// TEST: anhand der beiden Spalten Produktbezeichnung und Bildname kann man ein Rezept mit einem Bild verknüpfen. Das heißt: alle Bilder sollten so benannt werden, wie auch das Rezept heißt.
-$result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON Produktbezeichnung = BildName") or die($mysqli->error);
-
+// Alle Produkte aus der Datenbank in Variable $result schreiben und die Tabellen produkte und bilder mit der jeweiligen ID verknüpfen.
+$result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktID = BildID") or die($mysqli->error);
 
 // Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode.
 $id = 0;
@@ -49,12 +44,6 @@ if (isset($_POST['speichern'])) {
     // Speichern in die Datenbank.
     $mysqli->query("INSERT INTO produkte (Produktbezeichnung, Produktpreis, Produktbeschreibung, ProduktSchwierigkeitsgrad, ProduktKategorie, ProduktDauer, ProduktBildID, ProduktKueche) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer', '$produktbild', '$produktkueche')") or die($mysqli->error);
 
-
-
-
-
-
-
     // Meldungen in einer Session über erfolgreiches Speichern mit definierter Bootstrap Klasse "success".
     $_SESSION['message'] = "Rezept $produktname wurde gespeichert am $datum!";
     $_SESSION['msg_type'] = "success";
@@ -67,56 +56,18 @@ if (isset($_POST['speichern'])) {
 // Überprüfen, ob der Button Name "delete" geklickt wurde und mit der Methode "GET" die Daten löschen.
 if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
+
+    // LÖSCHEN EINES EINZELNEN BILDES AUF DEM SERVER: Erstmal alle Rezepte auswählen, die mit der ID verknüpft sind und in die Variable $result schreiben.
+    $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktID = BildID WHERE ProduktID=$id") or die($mysqli->error);
+    // Dann wird eine neue Variable $path erzeugt, mit der man durch die Variable $result den Datensatz als gelesenes Array schreibt.
+    $path = $result->fetch_array();
+    // Dann wird mit unlink die Bilddatei gelöscht, indem man den Absoluten Pfad angibt und die Variable $path mit ausgibt.
+    unlink("images/web/" . $path['RealerBildname']);
+
+    // Rezept aus der DB löschen.
     $mysqli->query("DELETE FROM produkte WHERE ProduktID=$id") or die($mysqli->error);
-    // Das Bild wird aus der Datenbank gelöscht aber nicht aus dem Ordner "web".
+    // Bild aus der DB löschen.
     $mysqli->query("DELETE FROM bilder WHERE BildID=$id") or die($mysqli->error);
-    // $mysqli->query("DELETE FROM bilder WHERE BildVerzeichnis=$id") or die($mysqli->error);
-
-    // $datas = mysqli_fetch_array($id);
-    // $path = 'images/web/'.$datas['BildVerzeichnis'];
-    // @unlink($path);
-
-    // unlink('images/web/' . $row["BildVerzeichnis"]);
-
-    // $filename = $row["BildVerzeichnis"];
-    // $path = $row['BildVerzeichnis'];
-
-    // Alle Bilddaten löschen
-    // get all file names
-    $files = glob('images/web/*');
-    // loop through files
-    foreach ($files as $file) {
-        if (is_file($file)) {
-            // delete file
-            unlink($file);
-            echo "Erfolgreich gelöscht!";
-        }
-        else {
-            echo "Fehler!";
-        }
-    }
-
-
-    // $path = $row["BildVerzeichnis"];
-    // unlink($path);
-
-    // Versuch die Datei vom Server zu löschen. -> Geht nur, wenn man den Namen im Pfad direkt auswählt.
-    // $row = $result->fetch_assoc();
-
-    // $path = basename($row["BildVerzeichnis"]);
-    // $path = "images/web/".$row["BildName"];
-    // $path = basename("images/web/");
-    // $path = basename("images/web");
-    // $path = $path ."/".$row['BildName'];
-
-    // $path = dirname($row["BildVerzeichnis"]);
-    // $path = $path . "/" . $row["BildName"];
-    // $path = $path.$row["BildName"];
-
-    // Hiermit funktioniert das Löschen des Bildes:
-    // $path = "images/web/limetten-curry.jpg";
-    // unlink($path);
-
 
     // Meldungen in einer Session über erfolgreiches Löschen mit definierter Bootstrap Klasse "danger".
     $_SESSION['message'] = "Rezept $produktname wurde am $datum gelöscht!";
@@ -131,7 +82,7 @@ if (isset($_GET['delete'])) {
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $update = true;
-    $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON Produktbezeichnung = BildName WHERE ProduktID=$id") or die($mysqli->error());
+    $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktID = BildID WHERE ProduktID=$id") or die($mysqli->error);
 
     // Überprüfen, ob die Datei überhaupts existiert.
     if (@count($result) == 1) {
@@ -161,7 +112,7 @@ if (isset($_POST['update'])) {
     $produktbild  = $_POST['userfile[]'];
     $produktkueche = $_POST['kueche'];
 
-    $mysqli->query("UPDATE produkte LEFT JOIN bilder ON Produktbezeichnung = BildName SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis', Produktbeschreibung='$produktbeschreibung', ProduktSchwierigkeitsgrad='$produktschwierigkeitsgrad', ProduktKategorie='$produktkategorie', ProduktDauer='$produktdauer', ProduktKueche='$produktkueche'  WHERE ProduktID='$id'") or die($mysqli->error);
+    $mysqli->query("UPDATE produkte LEFT JOIN bilder ON ProduktID = BildID SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis', Produktbeschreibung='$produktbeschreibung', ProduktSchwierigkeitsgrad='$produktschwierigkeitsgrad', ProduktKategorie='$produktkategorie', ProduktDauer='$produktdauer', ProduktKueche='$produktkueche'  WHERE ProduktID='$id'") or die($mysqli->error);
 
     $_SESSION['message'] = "Rezept $produktname wurde am $datum aktualisiert!";
     $_SESSION['msg_type'] = "warning";
@@ -240,86 +191,87 @@ if (isset($_FILES['userfile'])) {
     // pre_r($file_array);
     for ($i = 0; $i < count($file_array); $i++) {
         if ($file_array[$i]['error']) {
-            ?> <div class="alert alert danger">
+?> <div class="alert alert danger">
                 <?php echo $file_array[$i]['name'] . ' - ' . $phpFileUploadErrors[$file_array[$i]['error']];
                 ?> </div>
-        <?php
+            <?php
 
-    } else {
+        } else {
 
-        $extensions = array('jpg', 'png', 'gif', 'jpeg');
+            $extensions = array('jpg', 'png', 'gif', 'jpeg');
 
-        $file_ext = explode('.', $file_array[$i]['name']);
+            $file_ext = explode('.', $file_array[$i]['name']);
 
-        // pre_r($file_ext);die;
-        // Bildformatierung des Namens in der Datenbank.
-        $name = $file_ext[0];
-        $name = preg_replace("!-!", " ", $name);
-        $name = ucwords($name);
+            // pre_r($file_ext);die;
+            // Bildformatierung des Namens in der Datenbank.
+            $name = $file_ext[0];
+            $name = preg_replace("!-!", " ", $name);
+            $name = ucwords($name);
 
-        $file_ext = end($file_ext);
+            $file_ext = end($file_ext);
 
-        if (!in_array($file_ext, $extensions)) {
+            if (!in_array($file_ext, $extensions)) {
             ?> <div class="alert alert-danger">
                     <?php echo "{$file_array[$i]['name']}";
                     ?> </div> <?php
-                                        } else {
+                            } else {
 
-                                            // Daten Upload mit Name und Speicherort.
-                                            $img_dir = 'images/web/' . $file_array[$i]['name'];
+                                // Daten Upload mit Name und Speicherort.
+                                $img_dir = 'images/web/' . $file_array[$i]['name'];
+                                $img_realname = $file_array[$i]['name'];
 
-                                            move_uploaded_file($file_array[$i]['tmp_name'], $img_dir);
+                                move_uploaded_file($file_array[$i]['tmp_name'], $img_dir);
 
-                                            // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
-                                            $sql = "INSERT IGNORE INTO bilder (BildName,BildVerzeichnis) VALUES('$name','$img_dir')";
-                                            $mysqli->query($sql) or die($mysqli->error);
+                                // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
+                                $sql = "INSERT IGNORE INTO bilder (BildName,BildVerzeichnis,RealerBildname) VALUES('$name','$img_dir','$img_realname')";
+                                $mysqli->query($sql) or die($mysqli->error);
 
-                                            ?> <div class="alert alert-success">
+                                ?> <div class="alert alert-success">
                     <?php echo $file_array[$i]['name'] . ' - ' . $phpFileUploadErrors[$file_array[$i]['error']];
                     ?> </div> <?php
-                                        }
-                                    }
-                                }
                             }
+                        }
+                    }
+                }
 
-                            function reArrayFiles(&$file_post)
-                            {
+                function reArrayFiles(&$file_post)
+                {
 
-                                $file_ary = array();
-                                $file_count = count($file_post['name']);
-                                $file_keys = array_keys($file_post);
+                    $file_ary = array();
+                    $file_count = count($file_post['name']);
+                    $file_keys = array_keys($file_post);
 
-                                for ($i = 0; $i < $file_count; $i++) {
-                                    foreach ($file_keys as $key) {
-                                        $file_ary[$i][$key] = $file_post[$key][$i];
-                                    }
-                                }
+                    for ($i = 0; $i < $file_count; $i++) {
+                        foreach ($file_keys as $key) {
+                            $file_ary[$i][$key] = $file_post[$key][$i];
+                        }
+                    }
 
-                                return $file_ary;
-                            }
+                    return $file_ary;
+                }
 
-                            // function pre_r($array)
-                            // {
-                            //     echo '<pre>';
-                            //     print_r($array);
-                            //     echo '</pre>';
-                            // }
+                // function pre_r($array)
+                // {
+                //     echo '<pre>';
+                //     print_r($array);
+                //     echo '</pre>';
+                // }
 
-                            // Versuch die Datei aus dem Verzeichnis web zu löschen
+                // Versuch die Datei aus dem Verzeichnis web zu löschen
 
-                            $img_dir = 'images/web/' . 'name';
+                $img_dir = 'images/web/' . 'name';
 
-                            if (isset($_GET['delete'])) {
-                                delete_uploaded_file('name', $img_dir);
-                            }
+                if (isset($_GET['delete'])) {
+                    unlink('name', $img_dir);
+                }
 
 
 
-                            // Bilder aus der Datenbank abfragen.
-                            $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '0'") or die($mysqli->error);
+                // Bilder aus der Datenbank abfragen.
+                $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '0'") or die($mysqli->error);
 
-                            // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
-                            $data = $bilder->fetch_assoc();
+                // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
+                $data = $bilder->fetch_assoc();
     // print_r($data);
     // echo "<h2>{$data['BildName']}</h2>";
     // echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";

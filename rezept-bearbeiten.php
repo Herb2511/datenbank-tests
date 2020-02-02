@@ -29,7 +29,7 @@
     <div class="container">
         <?php
         // Datenbankverbindung aufbauen.
-        $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
+        $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysqli_error($mysqli));
         // Alle Produkte aus der Datenbank in Variable $result schreiben.
         $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktBildID = BildID") or die($mysqli->error);
         // Datenbankabfrage.
@@ -120,9 +120,9 @@
                 </table>
 
                 <!-- Bildrückgabe aus aufgaben.php $produktbild = BildVerzeichnis über den LEFT JOIN aus dem query-->
-                <img class="img-responsive" src="<?php echo $produktbild ?>" title="<?php echo $produktbildname ?>" alt="<?php echo $produktbildname?>">
+                <img class="img-responsive" src="<?php echo $produktbild ?>" title="<?php echo $produktbildname ?>" alt="<?php echo $produktbildname ?>">
 
-     
+
                 <!-- Bilder Upload Funktion -->
                 <!-- <div class="row">
                     <div class="form-group">

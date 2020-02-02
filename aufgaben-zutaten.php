@@ -1,6 +1,6 @@
 <?php
 // Datenbankverbindung aufbauen.
-$mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysql_error($mysqli));
+$mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysqli_error($mysqli));
 
 $produkteinheit = $_POST['einheit'];
 // $produktzutat = $_POST['names'];
