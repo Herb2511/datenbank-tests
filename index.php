@@ -11,7 +11,11 @@
 
 <body>
     <!-- aufgaben.php Datei einbinden und einmal ausführen. -->
-    <?php require_once 'aufgaben.php'; ?>
+    <?php require_once 'aufgaben.php';
+
+    // Gibt die Anzahl der Rezepte aus der Variablen $result aus der Datenbank zurück.
+    mysqli_num_rows($result);
+    ?>
 
     <?php
     // Ausgabe der Meldungen je nach Aktion von "msg_type" aus "aufgaben.php".
@@ -54,7 +58,7 @@
         <!-- Tabelle zur Darstellung aller Produkte. -->
         <div class="row mt-3">
             <form action="aufgaben.php" method="GET">
-                <h2>Rezeptübersicht</h2>
+                <h2>Eigene Rezepte: <?php echo mysqli_num_rows($result); ?></h2>
         </div>
         <div class="row justify-content-center">
             <table class="table">
@@ -71,16 +75,10 @@
                 </thead>
                 <?php
 
-                // Den Verzeichnispfad und Namen des Bildes zum Löschen raus finden.
-
-                // $path = dirname($row["BildVerzeichnis"]);
-                // $path = $path . "/" . $row["BildName"];
-
                 // Den Realname eines Bildes anzeigen
                 // $row = $result->fetch_array();
-                // $path = $row['RealerBildname'];
+                // $path = $row['dbrezeptbildrealerbildname'];
                 // print "Die Bilddatei heißt: " . $path;
-
 
                 // While Schleife benutzen, um alle Daten aus der Datenbank in die Tabelle zu schreiben.
                 while ($row = $result->fetch_assoc()) :

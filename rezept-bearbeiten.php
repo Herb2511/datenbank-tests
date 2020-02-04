@@ -28,8 +28,6 @@
 
     <div class="container">
         <?php
-        // Datenbankverbindung aufbauen.
-        $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysqli_error($mysqli));
         // Alle Produkte aus der Datenbank in Variable $result schreiben.
         $result = $mysqli->query("SELECT * FROM dbrezepte LEFT JOIN dbrezeptbilder ON dbrezeptid = dbrezeptbildid") or die($mysqli->error);
         // Datenbankabfrage.
@@ -53,12 +51,6 @@
                             <div class="form-group">
                                 <label><b>Name:</b></label>
                                 <input type="text" name="produktbezeichnung" class="form-control" value="<?php echo $produktname; ?>" placeholder="Produkt eingeben">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
-                                <label><b>Preis:</b></label>
-                                <input type="text" name="produktpreis" class="form-control" value="<?php echo $produktpreis; ?>" placeholder="Preis in €">
                             </div>
                         </td>
                         <td>
@@ -109,7 +101,7 @@
                                 <!-- Ändert den Button Status zu update wenn ein Produkt geändert wird. -->
                                 <?php
                                 if ($update == true) :
-                                    ?>
+                                ?>
                                     <button type="submit" class="btn btn-info" name="update" title="Aktualisieren">Aktualisieren</button>
                                 <?php else : ?>
                                     <button type="submit" class="btn btn-primary" name="speichern" title="Speichern">Speichern</button>
@@ -120,7 +112,7 @@
                 </table>
 
                 <!-- Bildrückgabe aus aufgaben.php $produktbild = BildVerzeichnis über den LEFT JOIN aus dem query-->
-                <img class="img-responsive" src="<?php echo $produktbild ?>" title="<?php echo $produktbildname ?>" alt="<?php echo $produktbildname ?>">
+                <img class="img-responsive" width='350px' src="<?php echo $produktbild ?>" title="<?php echo $produktbildname ?>" alt="<?php echo $produktbildname ?>">
 
 
                 <!-- Bilder Upload Funktion -->

@@ -3,8 +3,8 @@
 // Browser Session wird gestartet (notwending für die Meldungen und Aktivitäten zum Speichern, löschen und bearbeiten pro Session.)
 session_start();
 
-// Datenbankverbindung aufbauen.
-$mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysqli_error($mysqli));
+// Datenbankverbindung einbinden
+include 'db-verbindung.php';
 
 // Alle Produkte aus der Datenbank in Variable $result schreiben und die Tabellen produkte und bilder mit der jeweiligen ID verknüpfen.
 $result = $mysqli->query("SELECT * FROM dbrezepte LEFT JOIN dbrezeptbilder ON dbrezeptid = dbrezeptbildid") or die($mysqli->error);
@@ -20,7 +20,6 @@ $update = false;
 
 // Rückgabewert für das Einsetzen eines leeren Strings in den Wert "values" im Formular unter neues-rezept.php.
 $produktname = '';
-$produktpreis = '';
 $produktbeschreibung = '';
 $produktschwierigkeitsgrad = '';
 $produktkategorie = '';
@@ -32,17 +31,14 @@ $produktkueche = '';
 // Überprüfen, ob der Button Name "speichern" mit der Methode "POST" aus dem Formular geklickt wurde und erstellen von Variablen.
 if (isset($_POST['speichern'])) {
     $produktname = $_POST['produktbezeichnung'];
-    $produktpreis = $_POST['produktpreis'];
     $produktbeschreibung = $_POST['produktbeschreibung'];
     $produktschwierigkeitsgrad = $_POST['difficulty'];
     $produktkategorie = $_POST['category'];
     $produktdauer = $_POST['duration'];
-    $produktbild  = $_POST['userfile[]'];
     $produktkueche = $_POST['kueche'];
 
-
-    // Speichern in die Datenbank.
-    $mysqli->query("INSERT INTO dbrezepte (dbrezeptbezeichnung, dbrezeptpreis, dbrezeptbeschreibung, dbrezeptschwierigkeit, dbrezeptkategorie, ,  dbrezeptkueche) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer', '$produktbild', '$produktkueche')") or die($mysqli->error);
+    // Speichern aller Variablen aus den Formulardaten in die Datenbank.
+    $mysqli->query("INSERT INTO dbrezepte (dbrezeptbezeichnung, dbrezeptbeschreibung, dbrezeptschwierigkeit, dbrezeptkategorie, dbrezeptdauer, dbrezeptkueche) VALUES('$produktname', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer', '$produktkueche')") or die($mysqli->error);
 
     // Meldungen in einer Session über erfolgreiches Speichern mit definierter Bootstrap Klasse "success".
     $_SESSION['message'] = "Rezept $produktname wurde gespeichert am $datum!";
@@ -88,7 +84,6 @@ if (isset($_GET['edit'])) {
     if (@count($result) == 1) {
         $row = $result->fetch_array();
         $produktname = $row['dbrezeptbezeichnung'];
-        $produktpreis = $row['dbrezeptpreis'];
         $produktbeschreibung = $row['dbrezeptbeschreibung'];
         $produktschwierigkeitsgrad = $row['dbrezeptschwierigkeit'];
         $produktkategorie = $row['dbrezeptkategorie'];
@@ -104,7 +99,6 @@ if (isset($_GET['edit'])) {
 if (isset($_POST['update'])) {
     $id = $_POST['id'];
     $produktname = $_POST['produktbezeichnung'];
-    $produktpreis = $_POST['produktpreis'];
     $produktbeschreibung = $_POST['produktbeschreibung'];
     $produktschwierigkeitsgrad = $_POST['difficulty'];
     $produktkategorie = $_POST['category'];
@@ -112,7 +106,7 @@ if (isset($_POST['update'])) {
     $produktbild  = $_POST['userfile[]'];
     $produktkueche = $_POST['kueche'];
 
-    $mysqli->query("UPDATE dbrezepte LEFT JOIN dbrezeptbilder ON dbrezeptid = dbrezeptbildid SET dbrezeptbezeichnung='$produktname', dbrezeptpreis='$produktpreis', dbrezeptbeschreibung='$produktbeschreibung', dbrezeptschwierigkeit='$produktschwierigkeitsgrad', dbrezeptkategorie='$produktkategorie', dbrezeptdauer='$produktdauer', dbrezeptkueche='$produktkueche'  WHERE dbrezeptid='$id'") or die($mysqli->error);
+    $mysqli->query("UPDATE dbrezepte LEFT JOIN dbrezeptbilder ON dbrezeptid = dbrezeptbildid SET dbrezeptbezeichnung='$produktname', dbrezeptbeschreibung='$produktbeschreibung', dbrezeptschwierigkeit='$produktschwierigkeitsgrad', dbrezeptkategorie='$produktkategorie', dbrezeptdauer='$produktdauer', dbrezeptkueche='$produktkueche'  WHERE dbrezeptid='$id'") or die($mysqli->error);
 
     $_SESSION['message'] = "Rezept $produktname wurde am $datum aktualisiert!";
     $_SESSION['msg_type'] = "warning";
@@ -170,8 +164,20 @@ while ($row = mysqli_fetch_assoc($kueche)) {
 }
 
 
+// BILDER
+
+// Standard Bild beim Erstellen eines neuen Rezepts aus der Datenbank holen und anzeigen
+$bilder = $mysqli->query("SELECT dbrezeptbildverzeichnis, dbrezeptbildname FROM dbrezeptbilder WHERE dbrezeptbildid = '0'") or die($mysqli->error);
+
+// Standard Bild in Variable $vstandardbild übertragen und in neues-rezept.php darstellen.
+$vstandardbild = $bilder->fetch_assoc();
+
+// Datensatz Array zur Kontrolle anzeigen lassen.
+// print_r($vstandardbild);
+
+
 // --------------------------------------------------------------------------------------------------------------------------
-// Bilderupload und Speichern in der Datenbank.
+// BILDERUPLOAD und Speichern in der Datenbank.
 
 // Fehlermeldungsausgabe.
 $phpFileUploadErrors = array(
@@ -249,29 +255,3 @@ if (isset($_FILES['userfile'])) {
 
                     return $file_ary;
                 }
-
-                // function pre_r($array)
-                // {
-                //     echo '<pre>';
-                //     print_r($array);
-                //     echo '</pre>';
-                // }
-
-                // Versuch die Datei aus dem Verzeichnis web zu löschen
-
-                $img_dir = 'images/web/' . 'name';
-
-                if (isset($_GET['delete'])) {
-                    unlink('name', $img_dir);
-                }
-
-
-
-                // Standard Bild beim Erstellen eines neuen Rezepts anzeigen
-                $bilder = $mysqli->query("SELECT dbrezeptbildverzeichnis, dbrezeptbildname FROM dbrezeptbilder WHERE dbrezeptbildid = '0'") or die($mysqli->error);
-
-                // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
-                $data = $bilder->fetch_assoc();
-    // print_r($data);
-    // echo "<h2>{$data['BildName']}</h2>";
-    // echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";

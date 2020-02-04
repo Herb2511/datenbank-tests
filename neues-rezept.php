@@ -55,12 +55,6 @@
                         </td>
                         <td>
                             <div class="form-group">
-                                <label><b>Preis:</b></label>
-                                <input type="text" name="produktpreis" class="form-control" value="<?php echo $produktpreis; ?>" placeholder="Preis in €">
-                            </div>
-                        </td>
-                        <td>
-                            <div class="form-group">
                                 <label><b>Rezeptbeschreibung:</b></label>
                                 <input type="text" name="produktbeschreibung" class="form-control" value="<?php echo $produktbeschreibung; ?>" placeholder="Produktbeschreibung">
                             </div>
@@ -102,7 +96,7 @@
                 <!-- Standard Bild anzeigen -->
                 <div class="row">
                     <?php
-                    echo "<img src='{$data['dbrezeptbildverzeichnis']}' width='20%' height='20%' title='{$data['dbrezeptbildname']}' alt='{$data['dbrezeptbildname']}'>";
+                    echo "<img src='{$vstandardbild['dbrezeptbildverzeichnis']}' width='20%' height='20%' title='{$vstandardbild['dbrezeptbildname']}' alt='{$vstandardbild['dbrezeptbildname']}'>";
                     ?>
                 </div>
                 <!-- Bilder Upload Funktion -->
