@@ -267,7 +267,7 @@ if (isset($_FILES['userfile'])) {
 
 
 
-                // Bilder aus der Datenbank abfragen.
+                // Standard Bild beim Erstellen eines neuen Rezepts anzeigen
                 $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '0'") or die($mysqli->error);
 
                 // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
