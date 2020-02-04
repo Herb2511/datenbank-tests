@@ -29,7 +29,7 @@
     <div class="container">
         <?php
         // Alle Produkte aus der Datenbank in Variable $result schreiben.
-        $result = $mysqli->query("SELECT * FROM produkte") or die($mysqli->error);
+        $result = $mysqli->query("SELECT * FROM dbrezepte") or die($mysqli->error);
         // Datenbankabfrage.
         // pre_r($result);
         // Methode "fetch_assoc" benutzen um Daten aus der Datenbank abzufragen und anzuzeigen.
@@ -102,7 +102,7 @@
                 <!-- Standard Bild anzeigen -->
                 <div class="row">
                     <?php
-                    echo "<img src='{$data['BildVerzeichnis']}' width='20%' height='20%' title='{$data['BildName']}' alt='{$data['BildName']}'>";
+                    echo "<img src='{$data['dbrezeptbildverzeichnis']}' width='20%' height='20%' title='{$data['dbrezeptbildname']}' alt='{$data['dbrezeptbildname']}'>";
                     ?>
                 </div>
                 <!-- Bilder Upload Funktion -->

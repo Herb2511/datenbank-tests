@@ -7,7 +7,7 @@ session_start();
 $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysqli_error($mysqli));
 
 // Alle Produkte aus der Datenbank in Variable $result schreiben und die Tabellen produkte und bilder mit der jeweiligen ID verknüpfen.
-$result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktID = BildID") or die($mysqli->error);
+$result = $mysqli->query("SELECT * FROM dbrezepte LEFT JOIN dbrezeptbilder ON dbrezeptid = dbrezeptbildid") or die($mysqli->error);
 
 // Verstecktes Input Feld für die Verknüpfung der ID mit der POST Methode.
 $id = 0;
@@ -42,7 +42,7 @@ if (isset($_POST['speichern'])) {
 
 
     // Speichern in die Datenbank.
-    $mysqli->query("INSERT INTO produkte (Produktbezeichnung, Produktpreis, Produktbeschreibung, ProduktSchwierigkeitsgrad, ProduktKategorie, ProduktDauer, ProduktBildID, ProduktKueche) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer', '$produktbild', '$produktkueche')") or die($mysqli->error);
+    $mysqli->query("INSERT INTO dbrezepte (dbrezeptbezeichnung, dbrezeptpreis, dbrezeptbeschreibung, dbrezeptschwierigkeit, dbrezeptkategorie, ,  dbrezeptkueche) VALUES('$produktname', '$produktpreis', '$produktbeschreibung', '$produktschwierigkeitsgrad', '$produktkategorie', '$produktdauer', '$produktbild', '$produktkueche')") or die($mysqli->error);
 
     // Meldungen in einer Session über erfolgreiches Speichern mit definierter Bootstrap Klasse "success".
     $_SESSION['message'] = "Rezept $produktname wurde gespeichert am $datum!";
@@ -58,16 +58,16 @@ if (isset($_GET['delete'])) {
     $id = $_GET['delete'];
 
     // LÖSCHEN EINES EINZELNEN BILDES AUF DEM SERVER: Erstmal alle Rezepte auswählen, die mit der ID verknüpft sind und in die Variable $result schreiben.
-    $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktID = BildID WHERE ProduktID=$id") or die($mysqli->error);
+    $result = $mysqli->query("SELECT * FROM dbrezepte LEFT JOIN dbrezeptbilder ON dbrezeptid = dbrezeptbildid WHERE dbrezeptid=$id") or die($mysqli->error);
     // Dann wird eine neue Variable $path erzeugt, mit der man durch die Variable $result den Datensatz als gelesenes Array schreibt.
     $path = $result->fetch_array();
     // Dann wird mit unlink die Bilddatei gelöscht, indem man den Absoluten Pfad angibt und die Variable $path mit ausgibt.
-    unlink("images/web/" . $path['RealerBildname']);
+    unlink("images/web/" . $path['dbrezeptbildrealerbildname']);
 
     // Rezept aus der DB löschen.
-    $mysqli->query("DELETE FROM produkte WHERE ProduktID=$id") or die($mysqli->error);
+    $mysqli->query("DELETE FROM dbrezepte WHERE dbrezeptid=$id") or die($mysqli->error);
     // Bild aus der DB löschen.
-    $mysqli->query("DELETE FROM bilder WHERE BildID=$id") or die($mysqli->error);
+    $mysqli->query("DELETE FROM dbrezeptbilder WHERE dbrezeptbildid=$id") or die($mysqli->error);
 
     // Meldungen in einer Session über erfolgreiches Löschen mit definierter Bootstrap Klasse "danger".
     $_SESSION['message'] = "Rezept $produktname wurde am $datum gelöscht!";
@@ -82,20 +82,20 @@ if (isset($_GET['delete'])) {
 if (isset($_GET['edit'])) {
     $id = $_GET['edit'];
     $update = true;
-    $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktID = BildID WHERE ProduktID=$id") or die($mysqli->error);
+    $result = $mysqli->query("SELECT * FROM dbrezepte LEFT JOIN dbrezeptbilder ON dbrezeptid = dbrezeptbildid WHERE dbrezeptid=$id") or die($mysqli->error);
 
     // Überprüfen, ob die Datei überhaupts existiert.
     if (@count($result) == 1) {
         $row = $result->fetch_array();
-        $produktname = $row['Produktbezeichnung'];
-        $produktpreis = $row['Produktpreis'];
-        $produktbeschreibung = $row['Produktbeschreibung'];
-        $produktschwierigkeitsgrad = $row['ProduktSchwierigkeitsgrad'];
-        $produktkategorie = $row['ProduktKategorie'];
-        $produktdauer = $row['ProduktDauer'];
-        $produktbild  = $row['BildVerzeichnis'];
-        $produktbildname = $row['BildName'];
-        $produktkueche = $row['ProduktKueche'];
+        $produktname = $row['dbrezeptbezeichnung'];
+        $produktpreis = $row['dbrezeptpreis'];
+        $produktbeschreibung = $row['dbrezeptbeschreibung'];
+        $produktschwierigkeitsgrad = $row['dbrezeptschwierigkeit'];
+        $produktkategorie = $row['dbrezeptkategorie'];
+        $produktdauer = $row['dbrezeptdauer'];
+        $produktbild  = $row['dbrezeptbildverzeichnis'];
+        $produktbildname = $row['dbrezeptbildname'];
+        $produktkueche = $row['dbrezeptkueche'];
     }
 }
 
@@ -112,7 +112,7 @@ if (isset($_POST['update'])) {
     $produktbild  = $_POST['userfile[]'];
     $produktkueche = $_POST['kueche'];
 
-    $mysqli->query("UPDATE produkte LEFT JOIN bilder ON ProduktID = BildID SET Produktbezeichnung='$produktname', Produktpreis='$produktpreis', Produktbeschreibung='$produktbeschreibung', ProduktSchwierigkeitsgrad='$produktschwierigkeitsgrad', ProduktKategorie='$produktkategorie', ProduktDauer='$produktdauer', ProduktKueche='$produktkueche'  WHERE ProduktID='$id'") or die($mysqli->error);
+    $mysqli->query("UPDATE dbrezepte LEFT JOIN dbrezeptbilder ON dbrezeptid = dbrezeptbildid SET dbrezeptbezeichnung='$produktname', dbrezeptpreis='$produktpreis', dbrezeptbeschreibung='$produktbeschreibung', dbrezeptschwierigkeit='$produktschwierigkeitsgrad', dbrezeptkategorie='$produktkategorie', dbrezeptdauer='$produktdauer', dbrezeptkueche='$produktkueche'  WHERE dbrezeptid='$id'") or die($mysqli->error);
 
     $_SESSION['message'] = "Rezept $produktname wurde am $datum aktualisiert!";
     $_SESSION['msg_type'] = "warning";
@@ -122,50 +122,50 @@ if (isset($_POST['update'])) {
 
 // Select Elemente ANZEIGEN und den Fokus setzen.
 // Werte aus der Tabelle Schwierigkeitsgrad holen und in Variable $option1 legen.
-$difficulty = $mysqli->query("SELECT SchwierigkeitsgradName FROM schwierigkeitsgrad ORDER BY SchwierigkeitsgradID ASC") or die($mysqli->error);
+$difficulty = $mysqli->query("SELECT dbschwierigkeitsgradname FROM dbschwierigkeitsgrad ORDER BY dbschwierigkeitsgradid ASC") or die($mysqli->error);
 $option1 = '';
 while ($row = mysqli_fetch_assoc($difficulty)) {
 
-    if ($row['SchwierigkeitsgradName'] == $produktschwierigkeitsgrad) {
-        $option1 .= '<option selected value = "' . $row['SchwierigkeitsgradName'] . '">' . $row['SchwierigkeitsgradName'] . '</option>';
+    if ($row['dbschwierigkeitsgradname'] == $produktschwierigkeitsgrad) {
+        $option1 .= '<option selected value = "' . $row['dbschwierigkeitsgradname'] . '">' . $row['dbschwierigkeitsgradname'] . '</option>';
     } else {
-        $option1 .= '<option value = "' . $row['SchwierigkeitsgradName'] . '">' . $row['SchwierigkeitsgradName'] . '</option>';
+        $option1 .= '<option value = "' . $row['dbschwierigkeitsgradname'] . '">' . $row['dbschwierigkeitsgradname'] . '</option>';
     }
 }
 
-// Werte aus der Tabelle Schwierigkeitsgrad holen und in Variable $option2 legen.
-$category = $mysqli->query("SELECT RezeptKategorieName FROM rezept_kategorie ORDER BY RezeptKategorieID ASC") or die($mysqli->error);
+// Werte aus der Tabelle Kategorie holen und in Variable $option2 legen.
+$category = $mysqli->query("SELECT dbrezeptkategoriename FROM dbrezeptkategorie ORDER BY dbrezeptkategorieid ASC") or die($mysqli->error);
 $option2 = '';
 while ($row = mysqli_fetch_assoc($category)) {
 
-    if ($row['RezeptKategorieName'] == $produktkategorie) {
-        $option2 .= '<option selected value = "' . $row['RezeptKategorieName'] . '">' . $row['RezeptKategorieName'] . '</option>';
+    if ($row['dbrezeptkategoriename'] == $produktkategorie) {
+        $option2 .= '<option selected value = "' . $row['dbrezeptkategoriename'] . '">' . $row['dbrezeptkategoriename'] . '</option>';
     } else {
-        $option2 .= '<option value = "' . $row['RezeptKategorieName'] . '">' . $row['RezeptKategorieName'] . '</option>';
+        $option2 .= '<option value = "' . $row['dbrezeptkategoriename'] . '">' . $row['dbrezeptkategoriename'] . '</option>';
     }
 }
 
-// Werte aus der Tabelle Schwierigkeitsgrad holen und in Variable $option3 legen.
-$duration = $mysqli->query("SELECT DauerName FROM dauer ORDER BY DauerID ASC") or die($mysqli->error);
+// Werte aus der Tabelle Dauer holen und in Variable $option3 legen.
+$duration = $mysqli->query("SELECT dbdauername FROM dbdauer ORDER BY dbdauerid ASC") or die($mysqli->error);
 $option3 = '';
 while ($row = mysqli_fetch_assoc($duration)) {
 
-    if ($row['DauerName'] == $produktdauer) {
-        $option3 .= '<option selected value = "' . $row['DauerName'] . '">' . $row['DauerName'] . '</option>';
+    if ($row['dbdauername'] == $produktdauer) {
+        $option3 .= '<option selected value = "' . $row['dbdauername'] . '">' . $row['dbdauername'] . '</option>';
     } else {
-        $option3 .= '<option value = "' . $row['DauerName'] . '">' . $row['DauerName'] . '</option>';
+        $option3 .= '<option value = "' . $row['dbdauername'] . '">' . $row['dbdauername'] . '</option>';
     }
 }
 
 // Werte aus der Tabelle Kueche holen und in Variable $option4 legen.
-$kueche = $mysqli->query("SELECT KuecheName FROM kueche ORDER BY KuecheID ASC") or die($mysqli->error);
+$kueche = $mysqli->query("SELECT dbkuechename FROM dbkueche ORDER BY dbkuecheid ASC") or die($mysqli->error);
 $option4 = '';
 while ($row = mysqli_fetch_assoc($kueche)) {
 
-    if ($row['KuecheName'] == $produktkueche) {
-        $option4 .= '<option selected value = "' . $row['KuecheName'] . '">' . $row['KuecheName'] . '</option>';
+    if ($row['dbkuechename'] == $produktkueche) {
+        $option4 .= '<option selected value = "' . $row['dbkuechename'] . '">' . $row['dbkuechename'] . '</option>';
     } else {
-        $option4 .= '<option value = "' . $row['KuecheName'] . '">' . $row['KuecheName'] . '</option>';
+        $option4 .= '<option value = "' . $row['dbkuechename'] . '">' . $row['dbkuechename'] . '</option>';
     }
 }
 
@@ -223,7 +223,7 @@ if (isset($_FILES['userfile'])) {
                                 move_uploaded_file($file_array[$i]['tmp_name'], $img_dir);
 
                                 // SQL Statement: Speichern des Namens und des Speicherorts in die Datenbank.
-                                $sql = "INSERT IGNORE INTO bilder (BildName,BildVerzeichnis,RealerBildname) VALUES('$name','$img_dir','$img_realname')";
+                                $sql = "INSERT IGNORE INTO dbrezeptbilder (dbrezeptbildname,dbrezeptbildverzeichnis,dbrezeptbildrealerbildname) VALUES('$name','$img_dir','$img_realname')";
                                 $mysqli->query($sql) or die($mysqli->error);
 
                                 ?> <div class="alert alert-success">
@@ -268,7 +268,7 @@ if (isset($_FILES['userfile'])) {
 
 
                 // Standard Bild beim Erstellen eines neuen Rezepts anzeigen
-                $bilder = $mysqli->query("SELECT BildVerzeichnis, BildName FROM bilder WHERE BildID = '0'") or die($mysqli->error);
+                $bilder = $mysqli->query("SELECT dbrezeptbildverzeichnis, dbrezeptbildname FROM dbrezeptbilder WHERE dbrezeptbildid = '0'") or die($mysqli->error);
 
                 // Mit einer While-Schleife alle Bilder aus der Datenbank darstellen.
                 $data = $bilder->fetch_assoc();

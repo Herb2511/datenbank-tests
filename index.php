@@ -86,18 +86,18 @@
                 while ($row = $result->fetch_assoc()) :
                 ?>
                     <tr>
-                        <td><img class="img-responsive" src="<?= $row['BildVerzeichnis'] ?>" width='70px' title="<?= $row['BildName']; ?>" alt="<?= $row['BildName']; ?>"></td>
-                        <td><?php echo $row['Produktbezeichnung'] ?></td>
-                        <td><?php echo $row['ProduktKategorie'] ?></td>
-                        <td><?php echo $row['ProduktSchwierigkeitsgrad'] ?></td>
-                        <td><?php echo $row['ProduktDauer'], ' Min.' ?></td>
-                        <td><?php echo $row['ProduktKueche'] ?></td>
+                        <td><img class="img-responsive" src="<?= $row['dbrezeptbildverzeichnis'] ?>" width='70px' title="<?= $row['dbrezeptbildname']; ?>" alt="<?= $row['dbrezeptbildname']; ?>"></td>
+                        <td><?php echo $row['dbrezeptbezeichnung'] ?></td>
+                        <td><?php echo $row['dbrezeptkategorie'] ?></td>
+                        <td><?php echo $row['dbrezeptschwierigkeit'] ?></td>
+                        <td><?php echo $row['dbrezeptdauer'], ' Min.' ?></td>
+                        <td><?php echo $row['dbrezeptkueche'] ?></td>
                         <td>
                             <!-- Button Bearbeiten. -->
-                            <a href="rezept-bearbeiten.php?edit=<?php echo $row['ProduktID']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
+                            <a href="rezept-bearbeiten.php?edit=<?php echo $row['dbrezeptid']; ?>" class="btn btn-info" title="Bearbeiten">Bearbeiten</a>
 
                             <!-- Button und Funktion Löschen mit Warnhinweis. -->
-                            <a href="index.php?delete=<?php echo $row['ProduktID']; ?>" onclick="return confirm('Rezept <?php echo $row['Produktbezeichnung']; ?> wirklich löschen?'); " class="btn btn-danger" title="Löschen">Löschen</a>
+                            <a href="index.php?delete=<?php echo $row['dbrezeptid']; ?>" onclick="return confirm('Rezept <?php echo $row['dbrezeptbezeichnung']; ?> wirklich löschen?'); " class="btn btn-danger" title="Löschen">Löschen</a>
                         </td>
                     </tr>
                 <?php endwhile; ?>

@@ -31,7 +31,7 @@
         // Datenbankverbindung aufbauen.
         $mysqli = new mysqli('localhost', 'root', '', 'test') or die(mysqli_error($mysqli));
         // Alle Produkte aus der Datenbank in Variable $result schreiben.
-        $result = $mysqli->query("SELECT * FROM produkte LEFT JOIN bilder ON ProduktBildID = BildID") or die($mysqli->error);
+        $result = $mysqli->query("SELECT * FROM dbrezepte LEFT JOIN dbrezeptbilder ON dbrezeptid = dbrezeptbildid") or die($mysqli->error);
         // Datenbankabfrage.
         // pre_r($result);
         // Methode "fetch_assoc" benutzen um Daten aus der Datenbank abzufragen und anzuzeigen.
